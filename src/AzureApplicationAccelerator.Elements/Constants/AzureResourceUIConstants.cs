@@ -17,5 +17,159 @@
                 public static string ReviewAndCreateName = "Review and Create";
             }
         }
+
+        public static class Elements
+        {
+
+            public static class CheckBox
+            {
+                public const string Type = "Microsoft.Common.CheckBox";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-checkbox";
+            }
+
+            public static class DropDown
+            {
+                public const string Type = "Microsoft.Common.DropDown";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-dropdown";
+            }
+
+            public static class EditableGrid
+            {
+                public const string Type = "Microsoft.Common.EditableGrid";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-editablegrid";
+            }
+
+            public static class FileUpload
+            {
+                public const string Type = "Microsoft.Common.FileUpload";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-fileupload";
+            }
+
+            public static class InfoBox
+            {
+                public const string Type = "Microsoft.Common.InfoBox";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-infobox";
+            }
+
+            public static class OptionsGroup
+            {
+                public const string Type = "Microsoft.Common.OptionsGroup";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-optionsgroup";
+            }
+
+            public static class PasswordBox
+            {
+                public const string Type = "Microsoft.Common.PasswordBox";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-passwordbox";
+            }
+
+            public static class Section
+            {
+                public const string Type = "Microsoft.Common.Section";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-section";
+            }
+
+            public static class ServicePrincipalSelector
+            {
+                public const string Type = "Microsoft.Common.ServicePrincipalSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-serviceprincipalselector";
+            }
+
+            public static class Slider
+            {
+                public const string Type = "Microsoft.Common.Slider";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-slider";
+            }
+
+            public static class TagsByResource
+            {
+                public const string Type = "Microsoft.Common.TagsByResource";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-tagsbyresource";
+            }
+
+            public static class TextBlock
+            {
+                public const string Type = "Microsoft.Common.TextBlock";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-textblock";
+            }
+
+            public static class TextBox
+            {
+                public const string Type = "Microsoft.Common.TextBox";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-textblock";
+            }
+
+            public static class CredentialsCombo
+            {
+                public const string Type = "Microsoft.Compute.CredentialsCombo";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-credentialscombo";
+            }
+
+            public static class SizeSelector
+            {
+                public const string Type = "Microsoft.Compute.SizeSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-sizeselector";
+            }
+
+            public static class UserNameTextBox
+            {
+                public const string Type = "Microsoft.Compute.UserNameTextBox";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-usernametextbox";
+            }
+
+            public static class KeyVaultCertificateSelector
+            {
+                public const string Type = "Microsoft.KeyVault.KeyVaultCertificateSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-keyvault-keyvaultcertificateselector";
+            }
+
+            public static class IdentitySelector
+            {
+                public const string Type = "Microsoft.ManagedIdentity.IdentitySelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-managedidentity-identityselector";
+            }
+
+            public static class PublicIpAddressCombo
+            {
+                public const string Type = "Microsoft.Network.PublicIpAddressCombo";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-network-publicipaddresscombo";
+            }
+
+            public static class VirtualNetworkCombo
+            {
+                public const string Type = "Microsoft.Network.VirtualNetworkCombo";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-network-virtualnetworkcombo";
+            }
+
+            public static class ArmApiControl
+            {
+                public const string Type = "Microsoft.Solutions.ArmApiControl";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-solutions-armapicontrol";
+            }
+
+            public static class ResourceSelector
+            {
+                public const string Type = "Microsoft.Solutions.ResourceSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-solutions-resourceselector";
+            }
+
+            public static class MultiStorageAccountCombo
+            {
+                public const string Type = "Microsoft.Storage.MultiStorageAccountCombo";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-storage-multistorageaccountcombo";
+            }
+
+            public static class StorageAccountSelector
+            {
+                public const string Type = "Microsoft.Storage.StorageAccountSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-storage-storageaccountselector";
+            }
+
+            public static class StorageBlobSelector
+            {
+                public const string Type = "Microsoft.Storage.StorageBlobSelector";
+                public const string InfoLink = "https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-storage-storageblobselector";
+            }
+        }
     }
 }

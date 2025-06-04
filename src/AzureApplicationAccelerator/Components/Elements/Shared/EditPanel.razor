@@ -1,0 +1,29 @@
+﻿@implements IDialogContentComponent<UIElement>
+@using AzureApplicationAccelerator.Constants
+@using AzureApplicationAccelerator.Elements.Models.Elements
+
+
+<FluentDialogBody>
+
+    <h3>EditPanel</h3>
+
+
+    <p>Type: @Content.Type</p>
+    <p>Id: @Content.Id</p>
+    <p>Editor type: @ElementRegistry.ComponentMap[Content.Type].EditorComponent.ToString()</p>
+    <p>Config type: @ElementRegistry.ComponentMap[Content.Type].ConfigComponent.ToString()</p>
+
+    @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].EditorComponent != null)
+    {
+        <p>Editor component found: @ElementRegistry.ComponentMap[Content.Type].EditorComponent</p>
+    }
+    else
+    {
+        <p>No editor component found for type: @Content.Type</p>
+    }
+
+</FluentDialogBody>
+
+@code {
+    [Parameter] public UIElement Content { get; set; } = default!;
+}

@@ -13,8 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj" />
     <ProjectReference Include="..\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj" />
   </ItemGroup>
-
 </Project>

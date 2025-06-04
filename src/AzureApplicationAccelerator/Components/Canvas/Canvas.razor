@@ -1,6 +1,8 @@
-﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+﻿@using AzureApplicationAccelerator.Components.Elements.Shared
+@using AzureApplicationAccelerator.Elements.Models.Elements
 @inject UIDefinitionService DefinitionService
 @inject IToastService ToastService
+@inject IDialogService DialogService
 
 <div class="sortable-container">
     <FluentSortableList Id="canvas"
@@ -23,7 +25,7 @@
                     }
                 </div>
                 <div class="canvas-item-actions">
-                    <FluentButton Appearance="Appearance.Accent">Edit</FluentButton>
+                    <FluentButton Appearance="Appearance.Accent" OnClick="() => OpenPanel(context)">Edit</FluentButton>
                     <FluentButton Color="var(--info)" OnClick="() => RemoveItem(context)">Delete</FluentButton>
                 </div>
             </div>
@@ -32,6 +34,8 @@
 </div>
 
 @code {
+    private IDialogReference? _dialog;
+
     protected override void OnInitialized()
     {
         DefinitionService.OnChange += StateHasChanged;
@@ -52,6 +56,22 @@
         var newElement = DefinitionService.ActiveStep.Elements[newIndex];
 
         await DefinitionService.SwapElements(oldElement.Id, newElement.Id);
+    }
+
+    private async Task OpenPanel(UIElement uIElement)
+    {
+        if (uIElement == null) return;
+        _dialog = await DialogService.ShowPanelAsync<EditPanel>(uIElement, new DialogParameters<UIElement>()
+        {
+            Content = uIElement,
+            Alignment = HorizontalAlignment.Right,
+            Title = $"{uIElement.Type}",
+            PrimaryAction = "Yes",
+            SecondaryAction = "No",
+            Width = "40vw"
+        });
+
+        var result = await _dialog.Result;
     }
 
     private async Task RemoveItem(UIElement uIElement)
