@@ -1,0 +1,58 @@
+﻿@using AzureApplicationAccelerator.Constants
+@inject UIDefinitionService DefinitionService
+
+<div>
+    <FluentNavMenu @bind-Expanded="@expanded" Title="Custom navigation menu">
+
+        @foreach (var group in ToolbarProvider.Groups)
+        {
+            <FluentNavGroup Icon="@group.Icon" Title="@group.Name">
+                <TitleTemplate></TitleTemplate>
+                <ChildContent>
+                    <div class="sortable-container">
+                        <FluentSortableList Id="@($"toolbar-{group.Name}")"
+                                            OnRemove="@ListOneRemove"
+                                            Items="group.Items"
+                                            Drop="false"
+                                            Sort="false"
+                                            Group="elementList"
+                                            Clone="true"
+                                            Class="fluent-sortable-list-v2">
+                            <ItemTemplate>
+                                <FluentNavLink Style="width:inherit" Icon="@context.Icon">@context.Name</FluentNavLink>
+                            </ItemTemplate>
+                        </FluentSortableList>
+                    </div>
+
+                </ChildContent>
+            </FluentNavGroup>
+        }
+    </FluentNavMenu>
+</div>
+
+@code
+{
+    bool expanded = true;
+
+    private async Task ListOneRemove(FluentSortableListEventArgs args)
+    {
+        if (args is null ||
+            args.FromListId == args.ToListId ||
+            args.ToListId == args.FromListId)
+        {
+            return;
+        }
+
+        var group = args.FromListId.Substring(8);
+        var toolbarItem = ToolbarProvider.Groups.FirstOrDefault(g => g.Name == group)?.Items[args.OldIndex];
+
+        // get the item at the old index in list 1
+        // var item = DefinitionService.Definition.Steps.First().Elements[args.OldIndex];
+
+        var clone = toolbarItem;
+
+        // add it to the new index in list 2
+
+        await DefinitionService.AddElementAsync(toolbarItem, args.NewIndex);
+    }
+}

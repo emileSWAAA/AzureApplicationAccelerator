@@ -1,0 +1,64 @@
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+@inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
+
+<div class="sortable-container">
+    <FluentSortableList Id="canvas"
+                        Group="elementList"
+                        Items="@DefinitionService.ActiveStep?.Elements"
+                        OnUpdate="@SortList"
+                        Clone="true"
+                        Handle="true"
+                        Style="overflow-y:auto; max-width:100%; min-height:80vh; max-height:80vh;">
+        <ItemTemplate>
+            <div class="canvas-item">
+                <div class="sortable-grab">
+                    <FluentIcon Value="@(new Icons.Regular.Size20.ArrowSort())" />
+                </div>
+                <div class="canvas-item-content">
+                    @context.Type
+                    @if(context.Type == "Microsoft.Common.DropDown")
+                    {
+                        <p>nog een regel</p>
+                    }
+                </div>
+                <div class="canvas-item-actions">
+                    <FluentButton Appearance="Appearance.Accent">Edit</FluentButton>
+                    <FluentButton Color="var(--info)" OnClick="() => RemoveItem(context)">Delete</FluentButton>
+                </div>
+            </div>
+        </ItemTemplate>
+    </FluentSortableList>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        DefinitionService.OnChange += StateHasChanged;
+    }
+
+    private async Task SortList(FluentSortableListEventArgs args)
+    {
+        if (args is null || args.OldIndex == args.NewIndex) return;
+
+        if (!string.IsNullOrEmpty(args.FromListId) && args.FromListId.StartsWith("toolbar-"))
+        {
+            Console.WriteLine("Item moved from toolbar, adding to canvas.");
+        }
+
+        var oldIndex = args.OldIndex;
+        var newIndex = args.NewIndex;
+        var oldElement = DefinitionService.ActiveStep.Elements[oldIndex];
+        var newElement = DefinitionService.ActiveStep.Elements[newIndex];
+
+        await DefinitionService.SwapElements(oldElement.Id, newElement.Id);
+    }
+
+    private async Task RemoveItem(UIElement uIElement)
+    {
+        if (uIElement == null) return;
+
+        await DefinitionService.RemoveElementAsync(uIElement.Id);
+        ToastService.ShowSuccess("Element removed");
+    }
+}

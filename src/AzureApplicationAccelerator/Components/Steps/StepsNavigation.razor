@@ -1,0 +1,113 @@
+﻿@using AzureApplicationAccelerator.Elements.Constants
+@using AzureApplicationAccelerator.Validators
+@using Microsoft.FluentUI.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+@inject UIDefinitionService DefinitionService
+@inject IDialogService DialogService
+
+<FluentTabs @bind-ActiveTabId="@SelectedTabId"
+            OnTabClose="@RemoveTab"
+            Size="TabSize.Large"
+            OnTabChange="@((tab) => SelectStep(tab))">
+    <FluentTab @key="@DefinitionService.Definition.Parameters.Basics.Name"
+               Label="@AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName"
+               Id="@($"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId}")"
+               Data="@DefinitionService.Definition.Parameters.Basics" />
+
+    @foreach (var step in DefinitionService.Definition.Parameters.Steps)
+    {
+        <FluentTab @bind-Label="@step.Name" Id="@($"step_{step.Id.ToString()}")" />
+    }
+
+    <div slot="start">
+        <FluentButton OnClick="@OpenDialogAsync"
+                      IconStart="@(new Icons.Regular.Size24.AddCircle())"
+                      Appearance="Appearance.Accent" />
+    </div>
+</FluentTabs>
+
+@code {
+    public string SelectedTabId = $"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId}";
+
+    private FluentTabs _fluentTabs = default!;
+
+    private async Task SelectStep(FluentTab tab)
+    {
+        // Logic to change the active step can be added here
+        var activeTab = tab;
+        if (activeTab is null || activeTab.Label.Equals(DefinitionService.ActiveStep.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        Guid stepId = Guid.Parse(activeTab.Id.Split('_')[1]);
+        await DefinitionService.SetActiveStepAsync(stepId);
+    }
+
+    private async Task AddTab()
+    {
+        try
+        {
+            // Open FluentUI dialog by setting a flag and rendering the dialog in this component
+        }
+        catch (Exception ex)
+        {
+            // TODO: snackbar
+            Console.WriteLine($"Error adding tab: {ex.Message}");
+        }
+    }
+
+    private async Task RemoveTab(FluentTab tabPanel)
+    {
+        if (tabPanel is null)
+        {
+            // TODO: snackbar error
+            return;
+        }
+
+        if (DefinitionService.ActiveStep is not null)
+        {
+            await DefinitionService.RemoveStepAsync(DefinitionService.ActiveStep.Id);
+        }
+    }
+
+    private async Task OpenDialogAsync()
+    {
+        DialogParameters parameters = new()
+        {
+            Title = "Create a new step",
+            PrimaryAction = "Yes",
+            PrimaryActionEnabled = true,
+            SecondaryAction = "No",
+            Width = "500px",
+            PreventScroll = true
+        };
+
+        var newName = new DialogName() { Title = string.Empty };
+        IDialogReference dialog = await DialogService.ShowDialogAsync<NewStepDialog>(newName, parameters);
+        DialogResult? result = await dialog.Result;
+
+        if (result?.Data is not null)
+        {
+            var res = result.Data as DialogName;
+            var tabName = res.Title;
+            if (DefinitionService.Definition.Parameters.Steps.Any(s => s.Name.Equals(tabName, StringComparison.OrdinalIgnoreCase)))
+            {
+
+            }
+
+            await DefinitionService.AddStepAsync(tabName);
+        }
+
+        else
+        {
+            Console.WriteLine($"Dialog closed - Canceled: {result.Cancelled}");
+        }
+    }
+
+    public class DialogName
+    {
+        [StepValidator]
+        public string Title { get; set; } = string.Empty;
+    }
+}

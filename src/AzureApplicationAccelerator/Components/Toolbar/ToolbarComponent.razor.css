@@ -1,0 +1,41 @@
+﻿.sortable-container ::deep .fluent-sortable-list {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+    .sortable-container ::deep .fluent-sortable-list .sortable-item {
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        width: 95%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        padding: 0 16px;
+        margin: 5px;
+        min-height: 40px;
+        height: 40px;
+        transition: box-shadow 0.2s;
+        border: 1px solid #e0e0e0;
+    }
+
+        .sortable-container ::deep .fluent-sortable-list .sortable-item:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            border-color: #bdbdbd;
+        }
+
+    .sortable-container ::deep .fluent-sortable-list .sortable-item-content {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .sortable-container ::deep .fluent-sortable-list .sortable-item-actions {
+        display: flex;
+        gap: 8px;
+        margin-left: 16px;
+    }

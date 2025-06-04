@@ -1,0 +1,67 @@
+﻿@implements IDialogContentComponent<DialogName>
+@using Microsoft.FluentUI.AspNetCore.Components
+@using static AzureApplicationAccelerator.Components.Steps.StepsNavigation
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+    <EditForm EditContext="@_editContext">
+        <DataAnnotationsValidator />
+
+        <FluentLabel Style="margin-bottom: 16px;">
+            The step title must be unique and not empty.
+        </FluentLabel>
+
+        <FluentTextField @bind-Value="@Content.Title" Required Label="Title" />
+
+        <div style="color: var(--error);">
+            <FluentValidationSummary />
+        </div>
+    </EditForm>
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  Disabled="@(!_editContext.Validate())"
+                  OnClick="@SaveAsync">
+        Save
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">
+        Cancel
+    </FluentButton>
+</FluentDialogFooter>
+
+@code {
+    private EditContext _editContext = default!;
+
+    [Parameter]
+    public DialogName Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _editContext = new EditContext(Content);
+    }
+
+    private async Task SaveAsync()
+    {
+        if (_editContext.Validate())
+        {
+            await Dialog.CloseAsync(Content);
+        }
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}

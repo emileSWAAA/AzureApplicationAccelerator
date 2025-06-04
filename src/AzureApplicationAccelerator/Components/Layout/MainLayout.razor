@@ -1,0 +1,54 @@
+﻿@inherits LayoutComponentBase
+@inject UIDefinitionService DefinitionService
+@inject Microsoft.Extensions.Hosting.IHostEnvironment HostEnvironment
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+<FluentMenuProvider />
+
+<FluentLayout>
+    <FluentHeader>
+        Azure Application Accelerator
+        @if (HostEnvironment.IsDevelopment())
+        {
+            <FluentSpacer />
+            <div style="color: red; font-weight: bold;">
+                Development Mode.
+            </div>
+            <FluentSpacer />
+            <p>ActiveStep: @DefinitionService?.ActiveStep?.Name</p>
+            <FluentButton OnClick="@DefinitionService.ClearAsync" Appearance="Appearance.Accent">Clear definition</FluentButton>
+        }
+    </FluentHeader>
+
+    <FluentBodyContent>
+        @if (_initialized)
+        {
+            @Body
+        }
+        else
+        {
+            <div>Loading...</div>
+        }
+    </FluentBodyContent>
+
+</FluentLayout>
+
+@code {
+
+    private bool _initialized;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_initialized)
+        {
+            _initialized = true;
+            await DefinitionService.InitializeAsync();
+            DefinitionService.OnChange += StateHasChanged;
+            StateHasChanged();
+        }
+    }
+
+}
