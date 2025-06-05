@@ -1,5 +1,24 @@
-﻿<h3>CheckBox</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements.Checkbox
+<FluentStack>
+    <FluentCheckbox @bind-Value="@_selectedValue"
+                    Label="@Element.Label"
+                    Name="@Element.Name"
+                    Required="@(Element.Constraints?.Required ?? false)" />
+
+    @if (Element.Constraints?.ValidationMessage is not null)
+    {
+        <FluentLabel Typo="Typography.Body" Color="@Color.Error">
+            @Element.Constraints?.ValidationMessage
+        </FluentLabel>
+    }
+
+</FluentStack>
+
 
 @code {
 
+    private bool _selectedValue = false;
+
+    [Parameter]
+    public CheckBoxElement Element { get; set; } = default!;
 }

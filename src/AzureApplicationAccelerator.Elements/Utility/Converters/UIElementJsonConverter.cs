@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Utility.Converters
+namespace AzureApplicationAccelerator.Elements.Utility.Converters
 {
     public class UIElementJsonConverter : JsonConverter<UIElement>
     {

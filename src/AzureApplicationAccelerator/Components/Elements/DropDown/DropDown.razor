@@ -1,5 +1,59 @@
-﻿<h3>DropDown</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements.DropDown
+@using AzureApplicationAccelerator.Elements.Models.Elements
+
+<FluentStack>
+    <FluentSelect TOption="AllowedValue"
+                  Label="@Element.Label"
+                  Name="@Element.Name"
+                  Placeholder="@Element.Placeholder"
+                  OptionText="(opt=>opt.Value)"
+                  Required="@(Element.Constraints?.Required ?? false)"
+                  Multiple="@(Element.Multiselect ?? false)"
+                  Style="width: 100%;">
+        <OptionTemplate>
+            @context.Value
+        </OptionTemplate>
+        <ChildContent>
+            @if (Element.Constraints?.AllowedValues != null)
+            {
+                foreach (var item in Element.Constraints.AllowedValues)
+                {
+                    <FluentOption Value="@item.Value">
+                        @item.Description
+                    </FluentOption>
+                }
+            }
+        </ChildContent>
+    </FluentSelect>
+</FluentStack>
 
 @code {
+    [Parameter] public DropDownElement Element { get; set; } = default!;
+    private FluentSelect<AllowedValue>? _fluentSelect;
 
+    protected override Task OnInitializedAsync()
+    {
+        // Ensure Constraints and AllowedValues are not null before accessing them
+        if (Element.DefaultValue != null && Element.DefaultValue.Count > 0)
+        {
+        }
+
+        Element.Constraints.AllowedValues.Add(new()
+        {
+            Value = "DefaultValue1",
+            Label = "Default Label 1",
+            Description = "This is the default description."
+        });
+
+        Element.Constraints.AllowedValues.Add(new()
+        {
+            Value = "DefaultValue2",
+            Label = "Default Label 2",
+            Description = "This is another default description."
+        });
+
+        StateHasChanged();
+
+        return base.OnInitializedAsync();
+    }
 }

@@ -18,6 +18,35 @@
             }
         }
 
+        public static readonly Dictionary<string, string> ElementTypeInfoLinks = new Dictionary<string, string>
+        {
+            { Elements.CheckBox.Type, Elements.CheckBox.InfoLink },
+            { Elements.DropDown.Type, Elements.DropDown.InfoLink },
+            { Elements.EditableGrid.Type, Elements.EditableGrid.InfoLink },
+            { Elements.FileUpload.Type, Elements.FileUpload.InfoLink },
+            { Elements.InfoBox.Type, Elements.InfoBox.InfoLink },
+            { Elements.OptionsGroup.Type, Elements.OptionsGroup.InfoLink },
+            { Elements.PasswordBox.Type, Elements.PasswordBox.InfoLink },
+            { Elements.Section.Type, Elements.Section.InfoLink },
+            { Elements.ServicePrincipalSelector.Type, Elements.ServicePrincipalSelector.InfoLink },
+            { Elements.Slider.Type, Elements.Slider.InfoLink },
+            { Elements.TagsByResource.Type, Elements.TagsByResource.InfoLink },
+            { Elements.TextBlock.Type, Elements.TextBlock.InfoLink },
+            { Elements.TextBox.Type, Elements.TextBox.InfoLink },
+            { Elements.CredentialsCombo.Type, Elements.CredentialsCombo.InfoLink },
+            { Elements.SizeSelector.Type, Elements.SizeSelector.InfoLink },
+            { Elements.UserNameTextBox.Type, Elements.UserNameTextBox.InfoLink },
+            { Elements.KeyVaultCertificateSelector.Type, Elements.KeyVaultCertificateSelector.InfoLink },
+            { Elements.IdentitySelector.Type, Elements.IdentitySelector.InfoLink },
+            { Elements.PublicIpAddressCombo.Type, Elements.PublicIpAddressCombo.InfoLink },
+            { Elements.VirtualNetworkCombo.Type, Elements.VirtualNetworkCombo.InfoLink },
+            { Elements.ArmApiControl.Type, Elements.ArmApiControl.InfoLink },
+            { Elements.ResourceSelector.Type, Elements.ResourceSelector.InfoLink },
+            { Elements.MultiStorageAccountCombo.Type, Elements.MultiStorageAccountCombo.InfoLink },
+            { Elements.StorageAccountSelector.Type, Elements.StorageAccountSelector.InfoLink },
+            { Elements.StorageBlobSelector.Type, Elements.StorageBlobSelector.InfoLink }
+        };
+
         public static class Elements
         {
 

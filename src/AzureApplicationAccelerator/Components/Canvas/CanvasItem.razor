@@ -1,0 +1,72 @@
+﻿@using AzureApplicationAccelerator.Components.Elements.Shared
+@using AzureApplicationAccelerator.Constants
+@using AzureApplicationAccelerator.Elements.Models.Elements
+@inject IDialogService DialogService
+@inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
+
+<div class="canvas-item">
+    <div class="sortable-grab">
+        <FluentIcon Value="@(new Icons.Regular.Size20.ArrowSort())" />
+    </div>
+    <div class="canvas-item-content">
+        @if (_editorComponent != null)
+        {
+            <DynamicComponent Type="_editorComponent" Parameters="new Dictionary<string, object> { { nameof(Element), Element } }" />
+        }
+
+    </div>
+    <div class="canvas-item-actions">
+        <FluentButton Appearance="Appearance.Accent" OnClick="OpenPanel">Edit</FluentButton>
+        <FluentButton Color="var(--info)" OnClick="RemoveItem">Delete</FluentButton>
+    </div>
+</div>
+
+@code {
+    [Parameter] public UIElement Element { get; set; } = default!;
+
+    private Type _editorComponent;
+
+    protected override Task OnInitializedAsync()
+    {
+        ElementRegistry.ComponentMap.TryGetValue(Element.Type, out var editorComponent);
+        if (editorComponent != null)
+        {
+            _editorComponent = editorComponent.EditorComponent;
+        }
+
+        StateHasChanged();
+        return base.OnInitializedAsync();
+    }
+
+    private async Task OpenPanel()
+    {
+        if (Element == null) return;
+        var dialog = await DialogService.ShowPanelAsync<EditPanel>(Element, new DialogParameters<UIElement>()
+        {
+            Content = Element,
+            Alignment = HorizontalAlignment.Right,
+            Title = $"{Element.Type}",
+            PrimaryAction = "Yes",
+            SecondaryAction = "No",
+            Width = "40vw"
+        });
+
+        var result = await dialog.Result;
+    }
+
+    private async Task RemoveItem()
+    {
+        try
+        {
+            if (Element == null) return;
+
+            await DefinitionService.RemoveElementAsync(Element.Id);
+            ToastService.ShowSuccess("Element removed");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Failed to remove element: {ex.Message}");
+        }
+    }
+}

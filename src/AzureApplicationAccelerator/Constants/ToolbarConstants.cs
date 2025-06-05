@@ -1,4 +1,4 @@
-﻿using AzureApplicationAccelerator.Elements.Models.Elements;
+﻿using AzureApplicationAccelerator.Elements.Models.Elements.Checkbox;
 using AzureApplicationAccelerator.Elements.Models.Elements.DropDown;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons;

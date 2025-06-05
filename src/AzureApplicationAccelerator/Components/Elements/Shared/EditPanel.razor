@@ -1,21 +1,23 @@
 ﻿@implements IDialogContentComponent<UIElement>
 @using AzureApplicationAccelerator.Constants
+@using AzureApplicationAccelerator.Elements.Constants
 @using AzureApplicationAccelerator.Elements.Models.Elements
 
-
 <FluentDialogBody>
+    <FluentAnchor Id="infoLink"
+                  Target="_blank"
+                  Href="@AzureResourceUIConstants.ElementTypeInfoLinks[Content.Type]"
+                  IconStart="@(new Icons.Regular.Size16.Info())">
+        Docs
+    </FluentAnchor>
 
-    <h3>EditPanel</h3>
+    <FluentTooltip Anchor="infoLink">
+        Azure Documentation Link
+    </FluentTooltip>
 
-
-    <p>Type: @Content.Type</p>
-    <p>Id: @Content.Id</p>
-    <p>Editor type: @ElementRegistry.ComponentMap[Content.Type].EditorComponent.ToString()</p>
-    <p>Config type: @ElementRegistry.ComponentMap[Content.Type].ConfigComponent.ToString()</p>
-
-    @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].EditorComponent != null)
+    @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].ConfigComponent != null)
     {
-        <p>Editor component found: @ElementRegistry.ComponentMap[Content.Type].EditorComponent</p>
+        <DynamicComponent Type="@ElementRegistry.ComponentMap[Content.Type].ConfigComponent" />
     }
     else
     {

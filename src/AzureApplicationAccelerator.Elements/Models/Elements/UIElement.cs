@@ -10,8 +10,7 @@ namespace AzureApplicationAccelerator.Elements.Models.Elements
         public bool? Visible { get; set; }
         public string? Label { get; set; }
         public string? ToolTip { get; set; }
-        public IConstraint Constraints { get; set; }
-        public IOption? Options { get; set; }
+        //public IOption? Options { get; set; }
     }
 
     //public class UIElementConstraints
@@ -49,10 +48,10 @@ namespace AzureApplicationAccelerator.Elements.Models.Elements
     //    public string Sku { get; set; }
     //}
 
-    //public class AllowedValue
-    //{
-    //    public string Label { get; set; }
-    //    public string Value { get; set; }
-    //    public string? Description { get; set; }
-    //}
+    public class AllowedValue
+    {
+        public string Label { get; set; }
+        public string Value { get; set; }
+        public string? Description { get; set; }
+    }
 }

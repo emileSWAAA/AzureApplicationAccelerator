@@ -1,5 +1,6 @@
 ﻿using AzureApplicationAccelerator.Elements.Constants;
 using AzureApplicationAccelerator.Elements.Models.Elements;
+using AzureApplicationAccelerator.Elements.Utility.Converters;
 using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Models
@@ -15,6 +16,7 @@ namespace AzureApplicationAccelerator.Elements.Models
 
     public class Parameters
     {
+        [JsonConverter(typeof(BasicsStepConverter))]
         public Step Basics { get; set; } = new()
         {
             Id = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId,
