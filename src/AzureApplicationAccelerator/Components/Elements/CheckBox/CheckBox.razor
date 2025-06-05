@@ -1,4 +1,6 @@
 ﻿@using AzureApplicationAccelerator.Elements.Models.Elements.Checkbox
+@inject UIDefinitionService DefinitionService
+
 <FluentStack>
     <FluentCheckbox @bind-Value="@_selectedValue"
                     Label="@Element.Label"

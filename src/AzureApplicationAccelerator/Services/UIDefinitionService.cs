@@ -1,5 +1,4 @@
-﻿using AzureApplicationAccelerator.Constants;
-using AzureApplicationAccelerator.Dto;
+﻿using AzureApplicationAccelerator.Dto;
 using AzureApplicationAccelerator.Elements.Constants;
 using AzureApplicationAccelerator.Elements.Models;
 using AzureApplicationAccelerator.Elements.Models.Elements;
@@ -126,37 +125,6 @@ namespace AzureApplicationAccelerator.Services
             NotifyChanged();
         }
 
-        //public async Task NextStep()
-        //{
-        //    if (ActiveStep.Id == AppConstants.Steps.ReviewAndCreateId)
-        //    {
-        //        return;
-        //    }
-
-        //    var nextStepIndex = Definition.Parameters.Steps.IndexOf(ActiveStep) + 1;
-        //    if (nextStepIndex < Definition.Parameters.Steps.Count)
-        //    {
-        //        ActiveStep = Definition.Parameters.Steps[nextStepIndex];
-        //        await PersistAsync();
-        //        NotifyChanged();
-        //    }
-        //}
-
-        //public async Task PreviousStep()
-        //{
-        //    if (ActiveStep.Id == AppConstants.Steps.BasicsId)
-        //    {
-        //        return;
-        //    }
-        //    var previousStepIndex = Definition.Parameters.Steps.IndexOf(ActiveStep) - 1;
-        //    if (previousStepIndex >= 0)
-        //    {
-        //        ActiveStep = Definition.Parameters.Steps[previousStepIndex];
-        //        await PersistAsync();
-        //        NotifyChanged();
-        //    }
-        //}
-
         public async Task AddElementAsync(UIElement element)
         {
             if (element is null)
@@ -203,6 +171,24 @@ namespace AzureApplicationAccelerator.Services
 
             await PersistAsync();
             NotifyChanged();
+        }
+
+        public async Task UpdateElementAsync(UIElement element)
+        {
+            ArgumentNullException.ThrowIfNull(element, nameof(element));
+            if (ActiveStep is null)
+            {
+                throw new InvalidOperationException("No active step to update the element in.");
+            }
+
+            var existingElement = ActiveStep.Elements.FirstOrDefault(e => e.Id == element.Id);
+            if (existingElement is not null)
+            {
+                existingElement = element;
+
+                await PersistAsync();
+                NotifyChanged();
+            }
         }
 
         public async Task RemoveElementAsync(Guid elementId)

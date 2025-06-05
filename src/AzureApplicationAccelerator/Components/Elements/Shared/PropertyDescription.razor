@@ -1,0 +1,9 @@
+﻿@namespace AzureApplicationAccelerator.Components.Elements.Shared
+
+<div style="font-size: var(--type-ramp-minus-1-font-size); color: var(--neutral-foreground-hint); margin-top: -8px; margin-bottom: 10px;">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

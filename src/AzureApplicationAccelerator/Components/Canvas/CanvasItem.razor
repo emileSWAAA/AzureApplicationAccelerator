@@ -35,7 +35,6 @@
             _editorComponent = editorComponent.EditorComponent;
         }
 
-        StateHasChanged();
         return base.OnInitializedAsync();
     }
 
@@ -48,11 +47,33 @@
             Alignment = HorizontalAlignment.Right,
             Title = $"{Element.Type}",
             PrimaryAction = "Yes",
-            SecondaryAction = "No",
-            Width = "40vw"
+            PrimaryActionEnabled = true,
+            SecondaryAction = "Cancel",
+            Width = "40vw",
+            OnDialogResult = DialogService.CreateDialogCallback(this, HandleDialog)
         });
+    }
 
-        var result = await dialog.Result;
+    private async Task HandleDialog(DialogResult result)
+    {
+        if (result.Cancelled) return;
+        if (result.Data is UIElement updatedElement)
+        {
+            try
+            {
+                await DefinitionService.UpdateElementAsync(updatedElement);
+                ToastService.ShowSuccess("Element updated successfully");
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowError($"Failed to update element: {ex.Message}");
+            }
+        }
+        else
+        {
+            ToastService.ShowError("Invalid data returned from dialog");
+        }
+        
     }
 
     private async Task RemoveItem()

@@ -3,29 +3,39 @@
 @using AzureApplicationAccelerator.Elements.Constants
 @using AzureApplicationAccelerator.Elements.Models.Elements
 
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+        <h3>@Content.Type</h3>
+        <FluentAnchor Id="infoLink"
+                      Target="_blank"
+                      Href="@AzureResourceUIConstants.ElementTypeInfoLinks[Content.Type]"
+                      IconStart="@(new Icons.Regular.Size16.Info())" />
+        <FluentTooltip Anchor="infoLink">
+            Azure Documentation Link
+        </FluentTooltip>
+    </FluentStack>
+</FluentDialogHeader>
+
 <FluentDialogBody>
-    <FluentAnchor Id="infoLink"
-                  Target="_blank"
-                  Href="@AzureResourceUIConstants.ElementTypeInfoLinks[Content.Type]"
-                  IconStart="@(new Icons.Regular.Size16.Info())">
-        Docs
-    </FluentAnchor>
+    <FluentAccordion ActiveId="@_activeAccordionItem">
+        <DefaultProperties Element="Content" />
 
-    <FluentTooltip Anchor="infoLink">
-        Azure Documentation Link
-    </FluentTooltip>
+        @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].ConfigComponent != null)
+        {
+            <DynamicComponent Type="@ElementRegistry.ComponentMap[Content.Type].ConfigComponent" />
+        }
+        else
+        {
+            <p>No editor component found for type: @Content.Type</p>
+        }
+    </FluentAccordion>
 
-    @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].ConfigComponent != null)
-    {
-        <DynamicComponent Type="@ElementRegistry.ComponentMap[Content.Type].ConfigComponent" />
-    }
-    else
-    {
-        <p>No editor component found for type: @Content.Type</p>
-    }
+
 
 </FluentDialogBody>
 
 @code {
     [Parameter] public UIElement Content { get; set; } = default!;
+
+    string _activeAccordionItem = "General";
 }

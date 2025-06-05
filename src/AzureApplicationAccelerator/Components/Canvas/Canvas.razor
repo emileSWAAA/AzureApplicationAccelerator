@@ -1,8 +1,6 @@
 ﻿@using AzureApplicationAccelerator.Components.Elements.Shared
 @using AzureApplicationAccelerator.Elements.Models.Elements
 @inject UIDefinitionService DefinitionService
-@inject IToastService ToastService
-@inject IDialogService DialogService
 
 <div class="sortable-container">
     <FluentSortableList Id="canvas"
@@ -19,8 +17,6 @@
 </div>
 
 @code {
-    private IDialogReference? _dialog;
-
     protected override void OnInitialized()
     {
         DefinitionService.OnChange += StateHasChanged;

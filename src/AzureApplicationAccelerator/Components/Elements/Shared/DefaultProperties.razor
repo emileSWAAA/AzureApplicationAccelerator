@@ -1,5 +1,37 @@
-﻿<h3>DefaultProperties</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+@using AzureApplicationAccelerator.Components.Elements.Shared
+
+<FluentAccordionItem Heading="General">
+    <FluentStack Orientation="Orientation.Vertical" Gap="10">
+        <FluentTextField @bind-Value="Element.Name" Label="Name" Id="elementName" Style="width: 100%;" />
+        <PropertyDescription>
+            An internal identifier to reference a specific instance of an element. The most common usage of the element name is in outputs, where the output values of the specified elements are mapped to the parameters of the template. You can also use it to bind the output value of an element to the defaultValue of another element.
+        </PropertyDescription>
+
+        <FluentTextField @bind-Value="Element.Label" Label="Label" Id="elementLabel" Style="width: 100%;" />
+        <PropertyDescription>
+            The display text of the element. Some element types contain multiple labels, so the value could be an object containing multiple strings.
+        </PropertyDescription>
+
+        <FluentTextArea @bind-Value="Element.ToolTip" Label="ToolTip" Id="elementToolTip" Style="width: 100%;" Resize="TextAreaResize.Vertical" />
+        <PropertyDescription>
+            The text to display in the tool tip of the element. Similar to label, some elements support multiple tool tip strings. Inline links can be embedded using Markdown syntax.
+        </PropertyDescription>
+
+        <FluentCheckbox Label="Visible"
+                        Id="elementVisible"
+                        @bind-CheckState="Element.Visible"
+                        ThreeState="true" />
+        <PropertyDescription>
+            Indicates whether the element is displayed. If true, the element and applicable child elements are displayed. The default value is true. Use logical functions to dynamically control this property's value.
+            @if (!Element.Visible.HasValue)
+            {
+                <p>Value is null (indeterminate) and will not be rendered in the output unless explicitly handled.</p>
+            }
+        </PropertyDescription>
+    </FluentStack>
+</FluentAccordionItem>
 
 @code {
-
+    [Parameter] public UIElement Element { get; set; } = default!;
 }

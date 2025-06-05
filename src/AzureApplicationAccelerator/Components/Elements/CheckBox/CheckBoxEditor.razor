@@ -1,5 +1,9 @@
-﻿<h3>CheckBoxEditor</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
 
-@code {
+<FluentAccordionItem Heading="Constraints">
+    Checkbox constraints
+</FluentAccordionItem>
 
+@code { 
+    [Parameter] public UIElement Element { get; set; } = default!;
 }
