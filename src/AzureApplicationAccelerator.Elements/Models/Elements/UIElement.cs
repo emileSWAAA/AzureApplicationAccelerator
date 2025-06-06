@@ -1,57 +1,43 @@
 ﻿using AzureApplicationAccelerator.Elements.Interfaces;
+using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Models.Elements
 {
     public abstract class UIElement : IUIElement
     {
+        [JsonIgnore]
         public Guid Id { get; set; }
+
+        [JsonPropertyOrder(1)]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        [JsonPropertyOrder(2)]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
+
+        [JsonPropertyOrder(3)]
+        [JsonPropertyName("description")]
         public bool? Visible { get; set; }
+
+        [JsonPropertyOrder(4)]
+        [JsonPropertyName("label")]
         public string? Label { get; set; }
+
+        [JsonPropertyOrder(5)]
+        [JsonPropertyName("toolTip")]
         public string? ToolTip { get; set; }
-        //public IOption? Options { get; set; }
     }
-
-    //public class UIElementConstraints
-    //{
-    //    public bool? Required { get; set; }
-    //    public string ValidationMessage { get; set; }
-    //    public string Regex { get; set; }
-    //    public List<AllowedValue> AllowedValues { get; set; }
-    //}
-
-    //public class UIElementOptions
-    //{
-    //    public string Icon { get; set; }
-    //    public string Text { get; set; }
-    //    public Link Link { get; set; }
-    //}
-
-    //public class ValidationRule
-    //{
-    //    public string IsValid { get; set; }
-    //    public string Regex { get; set; }
-    //    public string Message { get; set; }
-    //}
-
-    //public class Link
-    //{
-    //    public string Label { get; set; }
-    //    public string Uri { get; set; }
-    //}
-
-    //public class ImageReference
-    //{
-    //    public string Publisher { get; set; }
-    //    public string Offer { get; set; }
-    //    public string Sku { get; set; }
-    //}
 
     public class AllowedValue
     {
+        [JsonPropertyName("label")]
         public string Label { get; set; }
+
+        [JsonPropertyName("value")]
         public string Value { get; set; }
+
+        [JsonPropertyName("description")]
         public string? Description { get; set; }
     }
 }

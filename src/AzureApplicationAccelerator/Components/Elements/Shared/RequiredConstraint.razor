@@ -1,0 +1,22 @@
+﻿<FluentCheckbox Label="Required"
+                @bind-CheckState="Required"
+                ThreeState="true" />
+<PropertyDescription>
+    Indicates whether the element is required, or not required, or indeterminate. If true, the element must be filled out before the form can be submitted. The default value is true.
+    @if (!Required.HasValue)
+    {
+        <p>Value is null (indeterminate) and will not be rendered in the output unless explicitly handled.</p>
+    }
+</PropertyDescription>
+
+@code {
+    [Parameter] public bool? Required { get; set; }
+
+    [Parameter] public EventCallback<bool?> RequiredChanged { get; set; }
+
+    private async Task OnRequiredChange(bool? value)
+    {
+        Required = value;
+        await RequiredChanged.InvokeAsync(value);
+    }
+}

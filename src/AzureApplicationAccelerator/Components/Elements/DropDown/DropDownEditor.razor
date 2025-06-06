@@ -1,5 +1,85 @@
-﻿<h3>DropDownEditor</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+@using System.Linq
+
+<FluentAccordionItem Heading="Constraints">
+    <RequiredConstraint @bind-Required="@Element.Constraints.Required" />
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Settings">
+    <FluentCheckbox ThreeState="true"
+                    @bind-CheckState="Element.MultiLine"
+                    Label="Multi-line Input" />
+    <PropertyDescription>If checked, the input will allow multiple lines of text. If unchecked, it will be a single-line input.</PropertyDescription>
+
+    <FluentCheckbox ThreeState="true"
+                    @bind-CheckState="Element.Multiselect"
+                    Label="Multi-select" />
+                    <PropertyDescription>If checked, the input will allow selection of multiple options.</PropertyDescription>
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Options">
+    <label class="mb-1" style="display: block; font-weight: 600;">Allowed Values</label>
+    <PropertyDescription>
+        Define the items available in the dropdown. At least one item is required. To emulate an optional selection when the field is 'Required', add an item with an empty label and value (e.g., Label: "(None)", Value: "").
+    </PropertyDescription>
+    @if (Element?.Constraints?.AllowedValues != null && Element.Constraints.AllowedValues.Any())
+    {
+        <FluentDataGrid Items="@Element.Constraints.AllowedValues.AsQueryable()" GridTemplateColumns="2fr 2fr 3fr 1fr auto" TGridItem="AllowedValue" Class="mb-2">
+            <TemplateColumn Title="Display Label" Context="allowedValue" Style="height: auto;">
+                <FluentTextField @bind-Value="allowedValue.Label"
+                                 Id="@($"display-{@Element.Id}")"
+                                 Placeholder="e.g., Value one" Required="true" />
+                <FluentTooltip Anchor="@($"display-{@Element.Id}")">
+                    The text displayed to the user for this option.
+                </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Title="Actual Value" Context="allowedValue" Style="height: auto;">
+                <FluentTextField @bind-Value="allowedValue.Value"
+                                 Id="@($"value-{@Element.Id}")"
+                                 Placeholder="e.g., one"
+                                 Required="true" Tooltip="" />
+                <FluentTooltip Anchor="@($"value-{@Element.Id}")">
+                    The underlying value submitted when this option is selected.
+                </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Title="Description" Context="allowedValue" Style="height: auto;">
+                <FluentTextArea @bind-Value="allowedValue.Description"
+                                Id="@($"desc-{@Element.Id}")"
+                                Placeholder="e.g., The value to select for option 1."
+                                Rows="1" />
+                <FluentTooltip Anchor="@($"desc-{@Element.Id}")">
+                    A specific description for this item, shown to the user.
+                </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Title="Actions" Align="Align.End" Context="allowedValue" Style="height: auto;">
+                <FluentButton Appearance="Appearance.Lightweight" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="() => RemoveAllowedValue(allowedValue)" Title="Remove this allowed value" />
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+    else
+    {
+        <p>No allowed values defined. Click "Add Allowed Value" to add items.</p>
+    }
+    <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size16.Add())" OnClick="AddAllowedValue" Style="margin: 8px;">Add Allowed Value</FluentButton>
+</FluentAccordionItem>
 
 @code {
+    [Parameter] public DropDownElement Element { get; set; } = default!;
 
+    private void AddAllowedValue()
+    {
+        if (Element.Constraints.AllowedValues == null)
+        {
+            Element.Constraints.AllowedValues = new List<AllowedValue>();
+        }
+        Element.Constraints.AllowedValues.Add(new AllowedValue { Label = string.Empty, Value = string.Empty });
+    }
+
+    private void RemoveAllowedValue(AllowedValue allowedValue)
+    {
+        if (Element.Constraints.AllowedValues != null)
+        {
+            Element.Constraints.AllowedValues.Remove(allowedValue);
+        }
+    }
 }

@@ -22,7 +22,8 @@
 
         @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].ConfigComponent != null)
         {
-            <DynamicComponent Type="@ElementRegistry.ComponentMap[Content.Type].ConfigComponent" />
+            <DynamicComponent Type="@ElementRegistry.ComponentMap[Content.Type].ConfigComponent"
+                              Parameters="@(new Dictionary<string, object> { { "Element", Content } })" />
         }
         else
         {

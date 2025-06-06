@@ -1,9 +1,10 @@
 ﻿@using AzureApplicationAccelerator.Elements.Models.Elements
 
 <FluentAccordionItem Heading="Constraints">
-    Checkbox constraints
+    <RequiredConstraint Required="@Element.Constraints?.Required" />
+    <ValidationMessageConstraint ValidationMessage="@Element.Constraints?.ValidationMessage" />
 </FluentAccordionItem>
 
-@code { 
-    [Parameter] public UIElement Element { get; set; } = default!;
+@code {
+    [Parameter] public CheckBoxElement Element { get; set; } = default!;
 }

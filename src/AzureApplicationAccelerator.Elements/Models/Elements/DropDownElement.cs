@@ -1,6 +1,6 @@
 ﻿using AzureApplicationAccelerator.Elements.Interfaces;
 
-namespace AzureApplicationAccelerator.Elements.Models.Elements.DropDown
+namespace AzureApplicationAccelerator.Elements.Models.Elements
 {
     public class DropDownElement : UIElement
     {
@@ -16,7 +16,7 @@ namespace AzureApplicationAccelerator.Elements.Models.Elements.DropDown
         public DropDownConstraints Constraints { get; set; } = new DropDownConstraints();
     }
 
-    public class DropDownConstraints : IConstraint
+    public class DropDownConstraints : IRequiredConstraint
     {
         public bool? Required { get; set; }
         public List<AllowedValue>? AllowedValues { get; set; } = new List<AllowedValue>();

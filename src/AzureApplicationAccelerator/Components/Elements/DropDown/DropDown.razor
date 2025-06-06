@@ -1,5 +1,4 @@
-﻿@using AzureApplicationAccelerator.Elements.Models.Elements.DropDown
-@using AzureApplicationAccelerator.Elements.Models.Elements
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
 
 <FluentStack>
     <FluentSelect TOption="AllowedValue"
@@ -25,6 +24,10 @@
             }
         </ChildContent>
     </FluentSelect>
+    @if (Element.Constraints.Required.HasValue)
+    {
+        <p>* req</p>
+    }
 </FluentStack>
 
 @code {

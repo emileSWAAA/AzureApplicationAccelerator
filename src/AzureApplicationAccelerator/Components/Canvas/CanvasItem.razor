@@ -10,7 +10,7 @@
         <FluentIcon Value="@(new Icons.Regular.Size20.ArrowSort())" />
     </div>
     <div class="canvas-item-content">
-        @if (_editorComponent != null)
+        @if (_editorComponent is not null)
         {
             <DynamicComponent Type="_editorComponent" Parameters="new Dictionary<string, object> { { nameof(Element), Element } }" />
         }
@@ -73,7 +73,7 @@
         {
             ToastService.ShowError("Invalid data returned from dialog");
         }
-        
+
     }
 
     private async Task RemoveItem()
