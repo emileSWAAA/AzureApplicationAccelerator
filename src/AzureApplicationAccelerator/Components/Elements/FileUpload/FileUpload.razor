@@ -1,26 +1,50 @@
 ﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+@inject UIDefinitionService UIDefinitionService
 
 <FluentStack>
     <FluentInputFile @ref="@_inputFile"
-                     Label="@Element.Label"
-                     Name="@Element.Name"
-                     Required="@(Element.Constraints?.Required ?? false)" />
+                     DragDropZoneVisible="false"
+                     Mode="InputFileMode.Buffer"
+                     Accept="@AcceptedFileTypes"
+                     AnchorId="@($"fileUpload-{Element.Id}")"
+                     OnCompleted="OnCompleted" />
+
+    <FluentTextField Value="@(string.Join(" ,", _fileNames))">
+    </FluentTextField>
+    <FluentButton Id="@($"fileUpload-{Element.Id}")"
+                  Appearance="Appearance.Accent"
+                  IconEnd="@(new Icons.Regular.Size24.FolderArrowUp())" />
 </FluentStack>
 
 @code {
 
     private FluentInputFile _inputFile = default!;
-    private string _acceptedFileTypes = string.Empty;
+    private string[] _fileNames = Array.Empty<string>();
 
     [Parameter] public FileUploadElement Element { get; set; } = default!;
 
     protected override Task OnInitializedAsync()
     {
-        if (Element?.Constraints?.AcceptFileTypes?.Any() == true)
-        {
-            _inputFile.Accept = string.Join(",", Element.Constraints.AcceptFileTypes);
-        }
+        UIDefinitionService.OnChange += StateHasChanged;
 
         return base.OnInitializedAsync();
     }
+
+    private void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        if (files == null || !files.Any())
+        {
+            _fileNames = Array.Empty<string>();
+            return;
+        }
+
+        _fileNames = files.Select(file => file.Name).ToArray();
+    }
+
+    private void Dispose()
+    {
+        UIDefinitionService.OnChange -= StateHasChanged;
+    }
+
+    private string AcceptedFileTypes => string.Join(",", Element.Constraints?.AcceptFileTypes ?? Array.Empty<string>());
 }

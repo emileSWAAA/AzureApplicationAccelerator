@@ -1,5 +1,47 @@
-﻿<h3>FileUploadEditor</h3>
+﻿@using AzureApplicationAccelerator.Elements.Models.Elements
+
+<FluentAccordionItem Heading="Constraints">
+    <RequiredConstraint Required="Element.Constraints.Required" />
+
+    @if (Element?.Constraints?.AcceptFileTypes != null)
+    {
+        <FluentDataGrid 
+            Items="Element.Constraints.AcceptFileTypes.AsQueryable()"
+            TGridItem="string"
+            Class="mb-2"
+        >
+            <TemplateColumn Title="Display Label" Context="acceptType" Style="height: auto;">
+                <FluentTextField @bind-Value="acceptType"
+                                 Id="@($"acceptedType-{@Element.Id}")"
+                                 Placeholder=".doc,.docx,.xml,application/msword" Required="true" />
+                <FluentTooltip Anchor="@($"acceptedType-{@Element.Id}")">
+                    The file type accepted by this file upload element. Use MIME types or file extensions (e.g., .jpg, .png).
+                </FluentTooltip>
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+    else
+    {
+        <p>No accepted filetypes defined. Click "Add" to add types.</p>
+    }
+
+    <FluentButton Appearance="Appearance.Accent"
+    IconStart="@(new Icons.Regular.Size16.Add())" 
+    OnClick="AddAcceptedType" Style="margin: 8px;">Add</FluentButton>
+
+
+</FluentAccordionItem>
 
 @code {
+    [Parameter] public FileUploadElement Element { get; set; } = default!;
 
+    private void AddAcceptedType()
+    {
+        if (Element.Constraints.AcceptFileTypes == null)
+        {
+            return;
+        }
+        Element.Constraints.AcceptFileTypes.Append("your_file_type_here"); // Add the file type to append
+        // Clear the input after adding the file type
+    }
 }

@@ -6,7 +6,7 @@ namespace AzureApplicationAccelerator.Elements.Models.Elements
     public class FileUploadElement : UIElement
     {
         [JsonPropertyName("constraints")]
-        public FileUploadConstraints? Constraints { get; set; }
+        public FileUploadConstraints? Constraints { get; set; } = new FileUploadConstraints();
 
         [JsonPropertyName("options")]
         public FileUploadOptions? Options { get; set; }
@@ -17,7 +17,7 @@ namespace AzureApplicationAccelerator.Elements.Models.Elements
         public bool? Required { get; set; }
 
         [JsonPropertyName("accept")]
-        public string[]? AcceptFileTypes { get; set; }
+        public string[]? AcceptFileTypes { get; set; } = Array.Empty<string>();
     }
 
     public class FileUploadOptions
