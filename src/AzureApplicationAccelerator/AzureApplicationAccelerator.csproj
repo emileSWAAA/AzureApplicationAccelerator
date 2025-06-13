@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.5" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.9" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.6" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.12.0" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.12.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj" />
+    <ProjectReference Include="..\AzureApplicationAccelerator.Client\AzureApplicationAccelerator.Client.csproj" />
   </ItemGroup>
 </Project>

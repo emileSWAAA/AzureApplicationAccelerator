@@ -1,6 +1,6 @@
-﻿using AzureApplicationAccelerator.Dto;
+﻿using AzureApplicationAccelerator.Shared.Models;
 
-namespace AzureApplicationAccelerator.Constants
+namespace AzureApplicationAccelerator.Shared.Constants
 {
     public static class ToolbarProvider
     {

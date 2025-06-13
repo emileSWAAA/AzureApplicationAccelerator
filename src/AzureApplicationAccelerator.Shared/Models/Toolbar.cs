@@ -1,8 +1,8 @@
-﻿using AzureApplicationAccelerator.Constants;
-using AzureApplicationAccelerator.Elements.Models.Elements;
+﻿using AzureApplicationAccelerator.Elements.Models.Elements;
+using AzureApplicationAccelerator.Shared.Constants;
 using Microsoft.FluentUI.AspNetCore.Components;
 
-namespace AzureApplicationAccelerator.Dto
+namespace AzureApplicationAccelerator.Shared.Models
 {
     public class Toolbar
     {
@@ -27,7 +27,7 @@ namespace AzureApplicationAccelerator.Dto
         public UIElement ToUiElement()
         {
             ArgumentNullException.ThrowIfNull(this, nameof(ToolbarItem));
-            if (!ToolbarConstants.UIElementDictionary.TryGetValue(this.Type, out var elementType))
+            if (!ToolbarConstants.UIElementDictionary.TryGetValue(Type, out var elementType))
             {
                 throw new ArgumentException($"Unknown toolbar item type: {elementType}");
             }
@@ -42,9 +42,9 @@ namespace AzureApplicationAccelerator.Dto
         private UIElement MapFromToolbarItem(ref UIElement uIElement)
         {
             ArgumentNullException.ThrowIfNull(uIElement, nameof(uIElement));
-            uIElement.Name = this.Name;
-            uIElement.Label = this.Label;
-            uIElement.Type = this.Type;
+            uIElement.Name = Name;
+            uIElement.Label = Label;
+            uIElement.Type = Type;
             uIElement.Id = Guid.NewGuid();
             uIElement.Visible = true;
 

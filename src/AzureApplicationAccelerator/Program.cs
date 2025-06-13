@@ -1,5 +1,5 @@
 using AzureApplicationAccelerator.Components;
-using AzureApplicationAccelerator.Services;
+using AzureApplicationAccelerator.Shared.Services;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +37,7 @@ app.MapStaticAssets();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode();
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddAdditionalAssemblies(typeof(AzureApplicationAccelerator.Client._Imports).Assembly);
 
 app.Run();

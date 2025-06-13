@@ -1,7 +1,7 @@
-﻿using AzureApplicationAccelerator.Services;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using AzureApplicationAccelerator.Shared.Services;
 
-namespace AzureApplicationAccelerator.Validators
+namespace AzureApplicationAccelerator.Shared.Validators
 {
     public class StepValidator : ValidationAttribute
     {

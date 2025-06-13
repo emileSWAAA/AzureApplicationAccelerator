@@ -1,9 +1,9 @@
-﻿using AzureApplicationAccelerator.Components.Elements.CheckBox;
-using AzureApplicationAccelerator.Components.Elements.DropDown;
-using AzureApplicationAccelerator.Components.Elements.FileUpload;
+﻿using AzureApplicationAccelerator.Client.Components.Elements.CheckBox;
+using AzureApplicationAccelerator.Client.Components.Elements.DropDown;
+using AzureApplicationAccelerator.Client.Components.Elements.FileUpload;
 using AzureApplicationAccelerator.Elements.Constants;
 
-namespace AzureApplicationAccelerator.Constants
+namespace AzureApplicationAccelerator.Client
 {
     public static class ElementRegistry
     {

@@ -2,7 +2,7 @@
 using Microsoft.FluentUI.AspNetCore.Components;
 using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons;
 
-namespace AzureApplicationAccelerator.Constants
+namespace AzureApplicationAccelerator.Shared.Constants
 {
     public static class ToolbarConstants
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System.Text.Json;
 
-namespace AzureApplicationAccelerator.Extensions
+namespace AzureApplicationAccelerator.Shared.Extensions
 {
     public static class LocalStorageExtensions
     {

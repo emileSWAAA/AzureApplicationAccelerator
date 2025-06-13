@@ -1,11 +1,10 @@
-﻿using AzureApplicationAccelerator.Dto;
-using AzureApplicationAccelerator.Elements.Constants;
+﻿using AzureApplicationAccelerator.Elements.Constants;
 using AzureApplicationAccelerator.Elements.Models;
 using AzureApplicationAccelerator.Elements.Models.Elements;
-using AzureApplicationAccelerator.Extensions;
+using AzureApplicationAccelerator.Shared.Models;
 using Microsoft.JSInterop;
 
-namespace AzureApplicationAccelerator.Services
+namespace AzureApplicationAccelerator.Shared.Services
 {
     public class UIDefinitionService
     {
@@ -31,7 +30,7 @@ namespace AzureApplicationAccelerator.Services
         public async Task ClearAsync()
         {
             Definition = new CreateUIDefinition();
-            await _js.SetItemAsync(StorageKey, Definition);
+            //await _js.SetItemAsync(StorageKey, Definition);
             NotifyChanged();
         }
 
@@ -151,7 +150,7 @@ namespace AzureApplicationAccelerator.Services
 
             if (index.HasValue)
             {
-                int insertIndex = index.Value;
+                var insertIndex = index.Value;
                 int count = ActiveStep.Elements.Count;
 
                 if (insertIndex < 0 || insertIndex > count)
