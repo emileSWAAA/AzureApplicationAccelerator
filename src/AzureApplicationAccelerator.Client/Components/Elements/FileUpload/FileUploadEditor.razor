@@ -1,11 +1,9 @@
-﻿@using AzureApplicationAccelerator.Elements.Models.Elements
-
-<FluentAccordionItem Heading="Constraints">
+﻿<FluentAccordionItem Heading="Constraints">
     <RequiredConstraint Required="Element.Constraints.Required" />
 
     @if (Element?.Constraints?.AcceptFileTypes != null)
     {
-        <FluentDataGrid 
+        <FluentDataGrid
             Items="Element.Constraints.AcceptFileTypes.AsQueryable()"
             TGridItem="string"
             Class="mb-2"
@@ -26,7 +24,7 @@
     }
 
     <FluentButton Appearance="Appearance.Accent"
-    IconStart="@(new Icons.Regular.Size16.Add())" 
+    IconStart="@(new Icons.Regular.Size16.Add())"
     OnClick="AddAcceptedType" Style="margin: 8px;">Add</FluentButton>
 
 

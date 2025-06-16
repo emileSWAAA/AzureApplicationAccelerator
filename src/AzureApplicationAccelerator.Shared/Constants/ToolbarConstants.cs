@@ -1,4 +1,4 @@
-﻿using AzureApplicationAccelerator.Elements.Models.Elements;
+﻿using AzureApplicationAccelerator.Shared.Models.Elements;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons;
 

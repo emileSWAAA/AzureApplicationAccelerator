@@ -1,9 +1,9 @@
-﻿using AzureApplicationAccelerator.Elements.Constants;
-using AzureApplicationAccelerator.Elements.Models.Elements;
-using AzureApplicationAccelerator.Elements.Utility.Converters;
+﻿using AzureApplicationAccelerator.Shared.Constants;
+using AzureApplicationAccelerator.Shared.Models.Elements;
+using AzureApplicationAccelerator.Shared.Utility.Converters;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Elements.Models
+namespace AzureApplicationAccelerator.Shared.Models
 {
     public class CreateUIDefinition
     {

@@ -5,8 +5,6 @@ VisualStudioVersion = 17.14.36109.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator", "src\AzureApplicationAccelerator\AzureApplicationAccelerator.csproj", "{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Elements", "src\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj", "{7A3810FC-875E-2835-91F5-78F748E7C8E2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Client", "src\AzureApplicationAccelerator.Client\AzureApplicationAccelerator.Client.csproj", "{27D73755-0366-43F5-A5CD-F9E1E9C3D113}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Shared", "src\AzureApplicationAccelerator.Shared\AzureApplicationAccelerator.Shared.csproj", "{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}"
@@ -21,10 +19,6 @@ Global
 		{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7A3810FC-875E-2835-91F5-78F748E7C8E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7A3810FC-875E-2835-91F5-78F748E7C8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A3810FC-875E-2835-91F5-78F748E7C8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A3810FC-875E-2835-91F5-78F748E7C8E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27D73755-0366-43F5-A5CD-F9E1E9C3D113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27D73755-0366-43F5-A5CD-F9E1E9C3D113}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27D73755-0366-43F5-A5CD-F9E1E9C3D113}.Release|Any CPU.ActiveCfg = Release|Any CPU

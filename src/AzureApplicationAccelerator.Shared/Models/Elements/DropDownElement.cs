@@ -1,6 +1,6 @@
-﻿using AzureApplicationAccelerator.Elements.Interfaces;
+﻿using AzureApplicationAccelerator.Shared.Interfaces;
 
-namespace AzureApplicationAccelerator.Elements.Models.Elements
+namespace AzureApplicationAccelerator.Shared.Models.Elements
 {
     public class DropDownElement : UIElement
     {

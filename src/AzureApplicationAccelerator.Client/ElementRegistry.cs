@@ -1,7 +1,7 @@
 ﻿using AzureApplicationAccelerator.Client.Components.Elements.CheckBox;
 using AzureApplicationAccelerator.Client.Components.Elements.DropDown;
 using AzureApplicationAccelerator.Client.Components.Elements.FileUpload;
-using AzureApplicationAccelerator.Elements.Constants;
+using AzureApplicationAccelerator.Shared.Constants;
 
 namespace AzureApplicationAccelerator.Client
 {

@@ -1,8 +1,8 @@
-﻿using AzureApplicationAccelerator.Elements.Models.Elements;
+﻿using AzureApplicationAccelerator.Shared.Models.Elements;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Elements.Utility.Converters
+namespace AzureApplicationAccelerator.Shared.Utility.Converters
 {
     public class UIElementJsonConverter : JsonConverter<UIElement>
     {

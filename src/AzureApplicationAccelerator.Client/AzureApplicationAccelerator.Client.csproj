@@ -16,7 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj" />
 	  <ProjectReference Include="..\AzureApplicationAccelerator.Shared\AzureApplicationAccelerator.Shared.csproj" />
 	</ItemGroup>
 

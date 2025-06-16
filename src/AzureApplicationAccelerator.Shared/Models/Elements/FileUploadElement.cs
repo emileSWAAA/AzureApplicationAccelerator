@@ -1,7 +1,7 @@
-﻿using AzureApplicationAccelerator.Elements.Interfaces;
+﻿using AzureApplicationAccelerator.Shared.Interfaces;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Elements.Models.Elements
+namespace AzureApplicationAccelerator.Shared.Models.Elements
 {
     public class FileUploadElement : UIElement
     {
