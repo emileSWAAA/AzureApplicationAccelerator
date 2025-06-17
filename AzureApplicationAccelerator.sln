@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Shared", "src\AzureApplicationAccelerator.Shared\AzureApplicationAccelerator.Shared.csproj", "{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Elements", "src\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj", "{C8F8B1AF-87FC-483A-B75D-4AFABC207830}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

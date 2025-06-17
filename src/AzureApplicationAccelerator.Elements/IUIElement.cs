@@ -1,4 +1,4 @@
-﻿namespace AzureApplicationAccelerator.Shared.Interfaces
+﻿namespace AzureApplicationAccelerator.Elements
 {
     public interface IUIElement
     {

@@ -1,4 +1,4 @@
-﻿namespace AzureApplicationAccelerator.Shared.Constants
+﻿namespace AzureApplicationAccelerator.Elements
 {
     public class AzureResourceUIConstants
     {

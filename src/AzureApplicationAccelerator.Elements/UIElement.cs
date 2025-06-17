@@ -1,7 +1,6 @@
-﻿using AzureApplicationAccelerator.Shared.Interfaces;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Shared.Models.Elements
+namespace AzureApplicationAccelerator.Elements
 {
     public abstract class UIElement : IUIElement
     {

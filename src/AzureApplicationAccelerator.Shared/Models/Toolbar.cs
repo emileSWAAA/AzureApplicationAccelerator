@@ -1,5 +1,5 @@
-﻿using AzureApplicationAccelerator.Shared.Constants;
-using AzureApplicationAccelerator.Shared.Models.Elements;
+﻿using AzureApplicationAccelerator.Elements;
+using AzureApplicationAccelerator.Shared.Constants;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 namespace AzureApplicationAccelerator.Shared.Models

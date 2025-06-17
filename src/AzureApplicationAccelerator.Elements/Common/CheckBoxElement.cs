@@ -1,6 +1,4 @@
-﻿using AzureApplicationAccelerator.Shared.Interfaces;
-
-namespace AzureApplicationAccelerator.Shared.Models.Elements
+﻿namespace AzureApplicationAccelerator.Elements.Common
 {
     public class CheckBoxElement : UIElement
     {

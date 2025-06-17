@@ -1,6 +1,5 @@
-﻿using AzureApplicationAccelerator.Shared.Constants;
+﻿using AzureApplicationAccelerator.Elements;
 using AzureApplicationAccelerator.Shared.Models;
-using AzureApplicationAccelerator.Shared.Models.Elements;
 using Microsoft.JSInterop;
 
 namespace AzureApplicationAccelerator.Shared.Services

@@ -1,9 +1,7 @@
-﻿using AzureApplicationAccelerator.Shared.Models;
-using AzureApplicationAccelerator.Shared.Models.Elements;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Shared.Utility.Converters
+namespace AzureApplicationAccelerator.Elements.Converters
 {
     public class BasicsStepConverter : JsonConverter<Step>
     {
