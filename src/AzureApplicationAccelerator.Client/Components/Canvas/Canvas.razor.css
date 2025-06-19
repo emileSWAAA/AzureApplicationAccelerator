@@ -1,20 +1,41 @@
-﻿.sortable-container ::deep .fluent-sortable-list {
+﻿.sortable-container {
+    border: 2px dashed #b3d4fc !important; /* TODO: Use design  tokens */
+    border-radius: 4px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    background-color: #f9fbff; /* TODO: Use design  tokens */
+    position: relative;
+}
+
+    .sortable-container .dragover {
+        background-color: #e0f0ff; /* TODO: Use design  tokens */
+        border-color: #64b5f6; /* TODO: Use design  tokens */
+    }
+
+.sortable-container ::deep .fluent-sortable-list {
     padding: 16px;
     background: transparent !important;
     margin: 0 !important;
     border: none !important;
+    overflow-y: auto;
+    max-width: 100%;
+    min-height: 80vh;
+    max-height: 80vh;
     --fluent-sortable-list-item-height: auto !important;
 }
+
+    .sortable-container ::deep .fluent-sortable-list.fluent-sortable-list-dragover {
+        background: #f0f0f0 !important; /* TODO: Use design  tokens */
+    }
 
     .sortable-container ::deep .fluent-sortable-list .sortable-item {
         height: auto !important;
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        background: #ffffff;
+        background: #ffffff; /* TODO: Use design  tokens */
         border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        border: 1px solid #e0e0e0;
+        border: 1px solid #e0e0e0; /* TODO: Use design  tokens */
         padding: 16px;
         margin-bottom: 20px;
         width: 100%;
@@ -23,8 +44,8 @@
     }
 
         .sortable-container ::deep .fluent-sortable-list .sortable-item:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            border-color: #bdbdbd;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); /* TODO: Use design  tokens */
+            border-color: #bdbdbd; /* TODO: Use design  tokens */
         }
 
         .sortable-container ::deep .fluent-sortable-list .sortable-item:first-child {
@@ -34,3 +55,13 @@
         .sortable-container ::deep .fluent-sortable-list .sortable-item:last-child {
             margin-bottom: 32px;
         }
+
+.dropzone-hint {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #90caf9; /* TODO: Use design  tokens */
+    font-size: 1.2rem;
+    pointer-events: none;
+}

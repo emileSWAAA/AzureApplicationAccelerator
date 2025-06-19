@@ -1,13 +1,18 @@
 ﻿@inject UIDefinitionService DefinitionService
 
 <div class="sortable-container">
+    @if (!DefinitionService.ActiveStep?.Elements?.Any() ?? true)
+    {
+        <div class="dropzone-hint">Drag elements here to get started!</div>
+    }
+
     <FluentSortableList Id="canvas"
                         Group="elementList"
                         Items="@DefinitionService.ActiveStep?.Elements"
                         OnUpdate="@SortList"
                         Clone="true"
-                        Handle="true"
-                        Style="overflow-y:auto; max-width:100%; min-height:80vh; max-height:80vh;">
+                        Handle="true" 
+                        Class="canvas-container">
         <ItemTemplate>
             <CanvasItem Element="@context" @key="@context.Id" />
         </ItemTemplate>
