@@ -21,10 +21,6 @@
             </TemplateColumn>
         </FluentDataGrid>
     }
-    else
-    {
-        <p>No accepted filetypes defined. Click "Add" to add types.</p>
-    }
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
         <FluentTextField @bind-Value="@NewAcceptedFileType" Placeholder="e.g., .jpg, image/png" style="width: 80%;" />
         <FluentButton Appearance="Appearance.Accent"
@@ -34,36 +30,41 @@
         </FluentButton>
     </FluentStack>
     <PropertyDescription>Specifies the types of files that are shown in the browser's file dialog. See the <a href="https://html.spec.whatwg.org/multipage/input.html#attr-input-accept" target="_blank">HTML5 specification</a> for allowed values. The default value is null.</PropertyDescription>
-
 </FluentAccordionItem>
 
 <FluentAccordionItem Heading="Options">
-    <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
-    <FluentCheckbox Label="Multiple" Value="@(Element?.Options?.Multiple ?? false)" />
-    <PropertyDescription>If multiple is set to true, the user is allowed to select more than one file in the browser's file dialog. The default value is false.</PropertyDescription>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
+        <FluentCheckbox Label="Multiple" Value="@(Element?.Options?.Multiple ?? false)" />
+        <PropertyDescription>If multiple is set to true, the user is allowed to select more than one file in the browser's file dialog. The default value is false.</PropertyDescription>
 
-    <FluentSelect TOption="FileUploadModeOption" Label="Upload Mode" @bind-SelectedOption="SelectedFileUploadOption" ValueChanged="UpdateFileUploadMode">
-        <FluentOption Value="@FileUploadModeOption.File.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.File)">File</FluentOption>
-        <FluentOption Value="@FileUploadModeOption.Url.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.Url)">Url</FluentOption>
-    </FluentSelect>
-    <PropertyDescription>
-        Specifies the upload mode. If file is specified, the output has the contents of the file as a blob. If url is specified, then the file is uploaded to a temporary location, and the output has the URL of the blob.
-        @Environment.NewLine
-        Temporary blobs will be purged after 24 hours. The default value is file.
-        @Environment.NewLine
-        An uploaded file is protected. The output URL includes a SAS token for accessing the file during deployment.
-    </PropertyDescription>
+        <FluentSelect TOption="FileUploadModeOption" Label="Upload Mode" @bind-SelectedOption="SelectedFileUploadOption" ValueChanged="UpdateFileUploadMode">
+            <FluentOption Value="@FileUploadModeOption.File.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.File)">File</FluentOption>
+            <FluentOption Value="@FileUploadModeOption.Url.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.Url)">Url</FluentOption>
+        </FluentSelect>
+        <PropertyDescription>
+            Specifies the upload mode. If file is specified, the output has the contents of the file as a blob. If url is specified, then the file is uploaded to a temporary location, and the output has the URL of the blob.
+            @Environment.NewLine
+            Temporary blobs will be purged after 24 hours. The default value is file.
+            @Environment.NewLine
+            An uploaded file is protected. The output URL includes a SAS token for accessing the file during deployment.
+        </PropertyDescription>
 
-    <FluentSelect TOption="FileUploadOpenModeOption" Label="Open Mode" @bind-SelectedOption="SelectedFileOpenModeOption" ValueChanged="UpdateFileOpenMode">
-        <FluentOption Value="@FileUploadOpenModeOption.Text.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Text)">Text</FluentOption>
-        <FluentOption Value="@FileUploadOpenModeOption.Binary.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Binary)">Binary</FluentOption>
-    </FluentSelect>
-    <PropertyDescription>
-        The value of openMode determines how the file is read. If the file is expected to be plain text, specify text otherwise specify binary. The default value is text.
-        @Environment.NewLine
-        If uploadMode is set to file and openMode is set to binary, the output is base64-encoded.
-    </PropertyDescription>
+        <FluentSelect TOption="FileUploadOpenModeOption" Label="Open Mode" @bind-SelectedOption="SelectedFileOpenModeOption" ValueChanged="UpdateFileOpenMode">
+            <FluentOption Value="@FileUploadOpenModeOption.Text.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Text)">Text</FluentOption>
+            <FluentOption Value="@FileUploadOpenModeOption.Binary.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Binary)">Binary</FluentOption>
+        </FluentSelect>
+        <PropertyDescription>
+            The value of openMode determines how the file is read. If the file is expected to be plain text, specify text otherwise specify binary. The default value is text.
+            @Environment.NewLine
+            If uploadMode is set to file and openMode is set to binary, the output is base64-encoded.
+        </PropertyDescription>
 
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentTextField @bind-Value="@Element.Options.Encoding" Placeholder="e.g., UTF-8" style="width: 80%;" Label="Encoding" />
+        </FluentStack>
+        <PropertyDescription>Specifies the encoding to use when reading the file. The default value is UTF-8, and is used only when openMode is set to text.</PropertyDescription>
+    </FluentStack>
 </FluentAccordionItem>
 
 @code {
