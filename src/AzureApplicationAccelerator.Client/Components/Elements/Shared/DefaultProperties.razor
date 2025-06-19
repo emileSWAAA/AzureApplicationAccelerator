@@ -1,4 +1,5 @@
-﻿<FluentAccordionItem Heading="General">
+﻿<FluentAccordionItem Heading="General" Expanded="true">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Settings())" Color="@Color.Neutral" Slot="start" />
     <FluentStack Orientation="Orientation.Vertical" Gap="10">
         <FluentTextField @bind-Value="Element.Name" Label="Name" Id="elementName" Style="width: 100%;" />
         <PropertyDescription>

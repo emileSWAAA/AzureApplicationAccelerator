@@ -1,8 +1,19 @@
-﻿<FluentTextField @bind-Value="ValidationMessage" Label="Validation message" Id="validationMessage" Style="width: 100%;" />
+﻿<FluentTextField ValueChanged="OnValidationMessageChange"
+                 Value="@ValidationMessage"
+                 Label="Validation message"
+                 Id="validationMessage"
+                 Style="width: 100%;" />
 <PropertyDescription>
     The validation message to display when the element does not meet the specified constraints. This message is shown to the user when the form is submitted and the element's value is invalid. If not set, a default message may be used by the framework.
 </PropertyDescription>
 
 @code {
     [Parameter] public string? ValidationMessage { get; set; }
+    [Parameter] public EventCallback<string?> ValidationMessageChanged { get; set; }
+
+    private async Task OnValidationMessageChange(string? value)
+    {
+        ValidationMessage = value;
+        await ValidationMessageChanged.InvokeAsync(value);
+    }
 }

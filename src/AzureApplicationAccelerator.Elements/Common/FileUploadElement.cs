@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Common
 {
@@ -8,7 +9,7 @@ namespace AzureApplicationAccelerator.Elements.Common
         public FileUploadConstraints? Constraints { get; set; } = new FileUploadConstraints();
 
         [JsonPropertyName("options")]
-        public FileUploadOptions? Options { get; set; }
+        public FileUploadOptions? Options { get; set; } = new FileUploadOptions();
     }
 
     public class FileUploadConstraints : IRequiredConstraint
@@ -16,7 +17,7 @@ namespace AzureApplicationAccelerator.Elements.Common
         public bool? Required { get; set; }
 
         [JsonPropertyName("accept")]
-        public string[]? AcceptFileTypes { get; set; } = Array.Empty<string>();
+        public IList<string>? AcceptFileTypes { get; set; } = new List<string>();
     }
 
     public class FileUploadOptions
@@ -25,11 +26,9 @@ namespace AzureApplicationAccelerator.Elements.Common
         public bool? Multiple { get; set; }
 
         [JsonPropertyName("uploadMode")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public FileUploadModeOption? UploadMode { get; set; }
 
         [JsonPropertyName("openMode")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         public FileUploadOpenModeOption? OpenMode { get; set; }
 
         [JsonPropertyName("encoding")]
@@ -38,17 +37,17 @@ namespace AzureApplicationAccelerator.Elements.Common
 
     public enum FileUploadModeOption
     {
-        [JsonPropertyName("file")]
+        [EnumMember(Value = "file")]
         File,
-        [JsonPropertyName("url")]
+        [EnumMember(Value = "url")]
         Url
     }
 
     public enum FileUploadOpenModeOption
     {
-        [JsonPropertyName("text")]
+        [EnumMember(Value = "text")]
         Text,
-        [JsonPropertyName("binary")]
+        [EnumMember(Value = "binary")]
         Binary
     }
 }

@@ -1,8 +1,9 @@
 ﻿@using System.Text.Json
 @using AzureApplicationAccelerator.Elements.Converters
+@using System.Text.Json.Serialization
 @inject UIDefinitionService DefinitionService
 
-<pre >@DefinitionJson</pre>
+<pre>@DefinitionJson</pre>
 
 @code {
     public string DefinitionJson { get; set; }
@@ -26,7 +27,7 @@
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-            Converters = { new UIElementJsonConverter() }
+            Converters = { new UIElementJsonConverter(), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         });
     }
 

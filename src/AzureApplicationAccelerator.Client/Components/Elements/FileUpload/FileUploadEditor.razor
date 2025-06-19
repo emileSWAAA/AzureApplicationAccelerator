@@ -1,20 +1,23 @@
 ﻿<FluentAccordionItem Heading="Constraints">
-    <RequiredConstraint Required="Element.Constraints.Required" />
+    <FluentIcon Value="@(new Icons.Regular.Size20.LockClosedRibbon())" Slot="start" Color="@Color.Neutral" />
 
-    @if (Element?.Constraints?.AcceptFileTypes != null)
+    <RequiredConstraint @bind-Required="Element.Constraints.Required" />
+
+    @if (Element?.Constraints?.AcceptFileTypes?.Any() == true)
     {
-        <FluentDataGrid
-            Items="Element.Constraints.AcceptFileTypes.AsQueryable()"
-            TGridItem="string"
-            Class="mb-2"
-        >
-            <TemplateColumn Title="Display Label" Context="acceptType" Style="height: auto;">
-                <FluentTextField @bind-Value="acceptType"
-                                 Id="@($"acceptedType-{@Element.Id}")"
-                                 Placeholder=".doc,.docx,.xml,application/msword" Required="true" />
+        <FluentDataGrid Items="Element.Constraints.AcceptFileTypes.AsQueryable()"
+                        TGridItem="string"
+                        Class="mb-2">
+            <TemplateColumn Title="Display Label" Context="acceptType">
+                <FluentLabel Id="@($"acceptedType-{@Element.Id}")">@acceptType</FluentLabel>
                 <FluentTooltip Anchor="@($"acceptedType-{@Element.Id}")">
                     The file type accepted by this file upload element. Use MIME types or file extensions (e.g., .jpg, .png).
                 </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Context="acceptType">
+                <FluentButton IconEnd="@(new Icons.Regular.Size20.Delete())"
+                              Title="Delete"
+                              OnClick="@(() => RemoveAcceptedType(acceptType))" />
             </TemplateColumn>
         </FluentDataGrid>
     }
@@ -22,24 +25,112 @@
     {
         <p>No accepted filetypes defined. Click "Add" to add types.</p>
     }
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentTextField @bind-Value="@NewAcceptedFileType" Placeholder="e.g., .jpg, image/png" style="width: 80%;" />
+        <FluentButton Appearance="Appearance.Accent"
+                      IconStart="@(new Icons.Regular.Size16.Add())"
+                      OnClick="AddAcceptedType" Style="margin: 8px;">
+            Add
+        </FluentButton>
+    </FluentStack>
+    <PropertyDescription>Specifies the types of files that are shown in the browser's file dialog. See the <a href="https://html.spec.whatwg.org/multipage/input.html#attr-input-accept" target="_blank">HTML5 specification</a> for allowed values. The default value is null.</PropertyDescription>
 
-    <FluentButton Appearance="Appearance.Accent"
-    IconStart="@(new Icons.Regular.Size16.Add())"
-    OnClick="AddAcceptedType" Style="margin: 8px;">Add</FluentButton>
+</FluentAccordionItem>
 
+<FluentAccordionItem Heading="Options">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
+    <FluentCheckbox Label="Multiple" Value="@(Element?.Options?.Multiple ?? false)" />
+    <PropertyDescription>If multiple is set to true, the user is allowed to select more than one file in the browser's file dialog. The default value is false.</PropertyDescription>
+
+    <FluentSelect TOption="FileUploadModeOption" Label="Upload Mode" @bind-SelectedOption="SelectedFileUploadOption" ValueChanged="UpdateFileUploadMode">
+        <FluentOption Value="@FileUploadModeOption.File.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.File)">File</FluentOption>
+        <FluentOption Value="@FileUploadModeOption.Url.ToString()" Selected="@(SelectedFileUploadOption == FileUploadModeOption.Url)">Url</FluentOption>
+    </FluentSelect>
+    <PropertyDescription>
+        Specifies the upload mode. If file is specified, the output has the contents of the file as a blob. If url is specified, then the file is uploaded to a temporary location, and the output has the URL of the blob.
+        @Environment.NewLine
+        Temporary blobs will be purged after 24 hours. The default value is file.
+        @Environment.NewLine
+        An uploaded file is protected. The output URL includes a SAS token for accessing the file during deployment.
+    </PropertyDescription>
+
+    <FluentSelect TOption="FileUploadOpenModeOption" Label="Open Mode" @bind-SelectedOption="SelectedFileOpenModeOption" ValueChanged="UpdateFileOpenMode">
+        <FluentOption Value="@FileUploadOpenModeOption.Text.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Text)">Text</FluentOption>
+        <FluentOption Value="@FileUploadOpenModeOption.Binary.ToString()" Selected="@(SelectedFileOpenModeOption == FileUploadOpenModeOption.Binary)">Binary</FluentOption>
+    </FluentSelect>
+    <PropertyDescription>
+        The value of openMode determines how the file is read. If the file is expected to be plain text, specify text otherwise specify binary. The default value is text.
+        @Environment.NewLine
+        If uploadMode is set to file and openMode is set to binary, the output is base64-encoded.
+    </PropertyDescription>
 
 </FluentAccordionItem>
 
 @code {
     [Parameter] public FileUploadElement Element { get; set; } = default!;
+    private string NewAcceptedFileType = string.Empty;
+    private FileUploadModeOption SelectedFileUploadOption = FileUploadModeOption.File;
+    private FileUploadOpenModeOption SelectedFileOpenModeOption = FileUploadOpenModeOption.Text;
+
+    protected override Task OnInitializedAsync()
+    {
+        SelectedFileUploadOption = Element.Options?.UploadMode ?? FileUploadModeOption.File;
+        SelectedFileOpenModeOption = Element.Options?.OpenMode ?? FileUploadOpenModeOption.Text;
+
+        return base.OnInitializedAsync();
+    }
 
     private void AddAcceptedType()
     {
-        if (Element.Constraints.AcceptFileTypes == null)
+        if (Element.Constraints.AcceptFileTypes == null || string.IsNullOrWhiteSpace(NewAcceptedFileType))
         {
             return;
         }
-        Element.Constraints.AcceptFileTypes.Append("your_file_type_here"); // Add the file type to append
-        // Clear the input after adding the file type
+
+        var newTypes = NewAcceptedFileType.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (var type in newTypes)
+        {
+            if (!Element.Constraints.AcceptFileTypes.Contains(type))
+            {
+                Element.Constraints.AcceptFileTypes.Add(type);
+            }
+        }
+
+        NewAcceptedFileType = string.Empty;
+    }
+
+    private void RemoveAcceptedType(string acceptType)
+    {
+        if (Element?.Constraints?.AcceptFileTypes == null ||
+            !Element.Constraints.AcceptFileTypes.Contains(acceptType, StringComparer.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        Element.Constraints.AcceptFileTypes.Remove(acceptType);
+    }
+
+    private void UpdateFileUploadMode(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) { return; }
+
+        Element.Options.UploadMode = value.ToLowerInvariant() switch
+        {
+            "file" => FileUploadModeOption.File,
+            "url" => FileUploadModeOption.Url,
+            _ => FileUploadModeOption.File
+        };
+    }
+
+    private void UpdateFileOpenMode(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) { return; }
+
+        Element.Options.OpenMode = value.ToLowerInvariant() switch
+        {
+            "text" => FileUploadOpenModeOption.Text,
+            "binary" => FileUploadOpenModeOption.Binary,
+            _ => FileUploadOpenModeOption.Text
+        };
     }
 }

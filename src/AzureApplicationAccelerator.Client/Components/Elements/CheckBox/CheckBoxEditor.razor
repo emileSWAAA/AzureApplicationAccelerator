@@ -1,6 +1,7 @@
 ﻿<FluentAccordionItem Heading="Constraints">
-    <RequiredConstraint Required="@Element.Constraints?.Required" />
-    <ValidationMessageConstraint ValidationMessage="@Element.Constraints?.ValidationMessage" />
+    <FluentIcon Value="@(new Icons.Regular.Size20.LockClosedRibbon())" Slot="start" Color="@Color.Neutral" />
+    <RequiredConstraint @bind-Required="@Element.Constraints.Required" />
+    <ValidationMessageConstraint @bind-ValidationMessage="@Element.Constraints.ValidationMessage" />
 </FluentAccordionItem>
 
 @code {

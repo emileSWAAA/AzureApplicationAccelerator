@@ -43,19 +43,6 @@
         await DefinitionService.SetActiveStepAsync(stepId);
     }
 
-    private async Task AddTab()
-    {
-        try
-        {
-            // Open FluentUI dialog by setting a flag and rendering the dialog in this component
-        }
-        catch (Exception ex)
-        {
-            // TODO: snackbar
-            Console.WriteLine($"Error adding tab: {ex.Message}");
-        }
-    }
-
     private async Task RemoveTab(FluentTab tabPanel)
     {
         if (tabPanel is null)
@@ -75,7 +62,7 @@
         DialogParameters parameters = new()
         {
             Title = "Create a new step",
-            PrimaryAction = "Yes",
+            PrimaryAction = "Save",
             PrimaryActionEnabled = true,
             SecondaryAction = "No",
             Width = "500px",
@@ -83,9 +70,8 @@
         };
 
         var newName = new DialogName() { Title = string.Empty };
-        IDialogReference dialog = await DialogService.ShowDialogAsync<NewStepDialog>(newName, parameters);
-        DialogResult? result = await dialog.Result;
-
+        var dialog = await DialogService.ShowDialogAsync<NewStepDialog>(newName, parameters);
+        var result = await dialog.Result as DialogResult;
         if (result?.Data is not null)
         {
             var res = result.Data as DialogName;
@@ -97,7 +83,6 @@
 
             await DefinitionService.AddStepAsync(tabName);
         }
-
         else
         {
             Console.WriteLine($"Dialog closed - Canceled: {result.Cancelled}");

@@ -1,17 +1,20 @@
 ﻿@inject UIDefinitionService DefinitionService
 
-<FluentStack>
-    <FluentCheckbox @bind-Value="@_selectedValue"
-                    Label="@Element.Label"
-                    Name="@Element.Name"
-                    Required="@(Element.Constraints?.Required ?? false)" />
-
-    @if (Element.Constraints?.ValidationMessage is not null)
-    {
-        <FluentLabel Typo="Typography.Body" Color="@Color.Error">
-            @Element.Constraints?.ValidationMessage
-        </FluentLabel>
-    }
+<FluentStack Orientation="Orientation.Vertical">
+    <div>
+        <FluentCheckbox @bind-Value="@_selectedValue"
+                        Label="@Element.Label"
+                        Name="@Element.Name"
+                        Required="@(Element.Constraints?.Required ?? false)" />
+    </div>
+    <div>
+        @if (Element.Constraints?.ValidationMessage is not null)
+        {
+            <FluentLabel Typo="Typography.Body" Color="@Color.Error">
+                @Element.Constraints?.ValidationMessage
+            </FluentLabel>
+        }
+    </div>
 
 </FluentStack>
 

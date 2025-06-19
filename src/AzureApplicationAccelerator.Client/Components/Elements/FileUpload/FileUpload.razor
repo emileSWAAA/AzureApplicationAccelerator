@@ -1,6 +1,17 @@
 ﻿@inject UIDefinitionService UIDefinitionService
 
 <FluentStack>
+    @if (!string.IsNullOrEmpty(Element.Label))
+    {
+        <FluentLabel>
+            @Element.Label
+            @if ((Element.Constraints?.Required ?? false))
+            {
+                <p>*</p>
+            }
+        </FluentLabel>
+    }
+
     <FluentInputFile @ref="@_inputFile"
                      DragDropZoneVisible="false"
                      Mode="InputFileMode.Buffer"
