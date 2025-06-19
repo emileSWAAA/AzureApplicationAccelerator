@@ -1,0 +1,86 @@
+﻿@inject UIDefinitionService UIDefinitionService
+
+<FluentCard Width="80%" Class="@(string.Join(" ", "infobox", @GetCardStyle()))">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        @if (Element?.Options?.Icon != null && Element?.Options?.Icon != IconType.None)
+        {
+            var (icon, color) = GetIcon();
+            <FluentIcon Value="icon" Color="color" />
+        }
+        <FluentLabel>
+            @if (!string.IsNullOrEmpty(Element?.Options?.Text))
+                {
+                    @Element.Options.Text
+                    @if (!string.IsNullOrWhiteSpace(Element?.Options?.Uri))
+                    {
+                        <a href="@Element?.Options?.Uri" target="_blank">
+                            <FluentIcon Value=@(new Icons.Regular.Size12.Open()) />
+                        </a>
+                    }
+                }
+                else
+                {
+                    @:No information to display.
+                }
+        </FluentLabel>
+    </FluentStack>
+</FluentCard>
+
+
+@code {
+    [Parameter] public InfoBoxElement Element { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        Element.Options.Icon = IconType.None;
+        UIDefinitionService.OnChange += StateHasChanged;
+    }
+
+    private string GetCardStyle()
+    {
+        return Element.Options.Icon switch
+        {
+            IconType.None => string.Empty,
+            IconType.Info => "info",
+            IconType.Warning => "warning",
+            IconType.Error => "error",
+            _ => string.Empty
+        };
+    }
+
+    private (Icon? Value, Color? Color) GetIcon()
+    {
+        return Element.Options.Icon switch
+        {
+            IconType.None => (null, Color.Accent),
+            IconType.Info => (new Icons.Regular.Size24.Info(), Color.Info),
+            IconType.Warning => (new Icons.Regular.Size24.Warning(), Color.Warning),
+            IconType.Error => (new Icons.Regular.Size24.DismissCircle(), Color.Error),
+            _ => default
+        };
+    }
+}
+
+<style>
+    .infobox {
+        border: solid;
+        border-color: var(--info);
+        border-radius: 0px;
+        border-width: 1px;
+    }
+
+        .infobox.info {
+            background-color: #f0f6ff;
+            border-color: #f0f6ff;
+        }
+
+        .infobox.warning {
+            background-color: #fff8f0;
+            border-color: #fff8f0;
+        }
+
+        .infobox.error {
+            background-color: #fef0f1;
+            border-color: #fef0f1;
+        }
+</style>

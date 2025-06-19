@@ -1,0 +1,64 @@
+﻿@using AzureApplicationAccelerator.Elements.Common
+
+<FluentAccordionItem Heading="Options">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentSelect TOption="IconType" Label="Icon" @bind-SelectedOption="SelectedIconType" ValueChanged="UpdateIconType">
+        @foreach (var iconType in Enum.GetValues<IconType>())
+        {
+            <FluentOption Value="@iconType.ToString()" Selected="@(SelectedIconType == iconType)">
+                @if (!iconType.Equals(IconType.None))
+                {
+                    var (icon, color) = GetIcon(iconType);
+                    <FluentIcon Value="@icon" Color="color" Slot="start" />
+                }
+                @iconType.ToString()
+            </FluentOption>
+        }
+    </FluentSelect>
+    <PropertyDescription>The icon to display in the infobox. Use None, Info, Warning, or Error.</PropertyDescription>
+
+    <FluentTextField @bind-Value="Element.Options.Text" Placeholder="Information text to display" style="width: 100%;" Label="Text" />
+    <PropertyDescription>The text to display in the infobox.</PropertyDescription>
+
+    <FluentTextField @bind-Value="Element.Options.Uri" Placeholder="https://example.com" style="width: 100%;" Label="URI" />
+    <PropertyDescription>A URI to link to for more information. If provided, an icon will be displayed next to the text.</PropertyDescription>
+
+</FluentAccordionItem>
+
+@code {
+    [Parameter] public InfoBoxElement Element { get; set; } = default!;
+    private IconType SelectedIconType;
+
+    protected override void OnInitialized()
+    {
+        SelectedIconType = Element.Options.Icon ?? IconType.None;
+        base.OnInitialized();
+    }
+
+    private void UpdateIconType(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Element.Options.Icon = IconType.None;
+            return;
+        }
+
+        if (Enum.TryParse<IconType>(value, true, out var iconType))
+        {
+            Element.Options.Icon = iconType;
+        }
+    }
+
+    private (Icon? Value, Color? Color) GetIcon(IconType iconType)
+    {
+        return iconType switch
+        {
+            IconType.None => (new Icons.Regular.Size24.Info(), Color.Accent),
+            IconType.Info => (new Icons.Regular.Size24.Info(), Color.Info),
+            IconType.Warning => (new Icons.Regular.Size24.Warning(), Color.Warning),
+            IconType.Error => (new Icons.Regular.Size24.DismissCircle(), Color.Error),
+            _ => default
+        };
+    }
+}

@@ -12,7 +12,7 @@ namespace AzureApplicationAccelerator.Shared.Constants
             { Items.DropDown.Type, typeof(DropDownElement) },
             { Items.FileUpload.Type, typeof(FileUploadElement) },
             //{ Items.EditableGrid.Type, typeof(EditableGridElement) },
-            //{ Items.InfoBox.Type, typeof(InfoBoxElement) },
+            { Items.InfoBox.Type, typeof(InfoBoxElement) },
             //{ Items.OptionsGroup.Type, typeof(OptionsGroupElement) },
             //{ Items.PasswordBox.Type, typeof(PasswordBoxElement) },
             //{ Items.Section.Type, typeof(SectionElement) },

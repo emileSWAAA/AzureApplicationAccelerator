@@ -33,7 +33,6 @@
 </FluentAccordionItem>
 
 <FluentAccordionItem Heading="Options">
-    <FluentStack VerticalAlignment="VerticalAlignment.Center">
         <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
         <FluentCheckbox Label="Multiple" Value="@(Element?.Options?.Multiple ?? false)" />
         <PropertyDescription>If multiple is set to true, the user is allowed to select more than one file in the browser's file dialog. The default value is false.</PropertyDescription>
@@ -64,7 +63,6 @@
             <FluentTextField @bind-Value="@Element.Options.Encoding" Placeholder="e.g., UTF-8" style="width: 80%;" Label="Encoding" />
         </FluentStack>
         <PropertyDescription>Specifies the encoding to use when reading the file. The default value is UTF-8, and is used only when openMode is set to text.</PropertyDescription>
-    </FluentStack>
 </FluentAccordionItem>
 
 @code {
