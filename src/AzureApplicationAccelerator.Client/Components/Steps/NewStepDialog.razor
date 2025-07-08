@@ -1,4 +1,4 @@
-﻿@implements IDialogContentComponent<DialogName>
+﻿@implements IDialogContentComponent<DialogContent>
 @using Microsoft.FluentUI.AspNetCore.Components
 @using static AzureApplicationAccelerator.Client.Components.Steps.StepsNavigation
 
@@ -19,6 +19,8 @@
         </FluentLabel>
 
         <FluentTextField @bind-Value="@Content.Title" Required Label="Title" />
+
+        <FluentTextField @bind-Value="@Content.Label" Required Label="Label" />
 
         <div style="color: var(--error);">
             <FluentValidationSummary />
@@ -42,7 +44,7 @@
     private EditContext _editContext = default!;
 
     [Parameter]
-    public DialogName Content { get; set; } = default!;
+    public DialogContent Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }

@@ -6,35 +6,6 @@ namespace AzureApplicationAccelerator.Shared.Constants
 {
     public static class ToolbarConstants
     {
-        public static Dictionary<string, Type> UIElementDictionary => new()
-        {
-            { Items.CheckBox.Type, typeof(CheckBoxElement) },
-            { Items.DropDown.Type, typeof(DropDownElement) },
-            { Items.FileUpload.Type, typeof(FileUploadElement) },
-            //{ Items.EditableGrid.Type, typeof(EditableGridElement) },
-            { Items.InfoBox.Type, typeof(InfoBoxElement) },
-            //{ Items.OptionsGroup.Type, typeof(OptionsGroupElement) },
-            //{ Items.PasswordBox.Type, typeof(PasswordBoxElement) },
-            //{ Items.Section.Type, typeof(SectionElement) },
-            //{ Items.ServicePrincipalSelector.Type, typeof(ServicePrincipalSelectorElement) },
-            //{ Items.Slider.Type, typeof(SliderElement) },
-            //{ Items.TagsByResource.Type, typeof(TagsByResourceElement) },
-            //{ Items.TextBlock.Type, typeof(TextBlockElement) },
-            //{ Items.TextBox.Type, typeof(TextBoxElement) },
-            //{ Items.CredentialsCombo.Type, typeof(CredentialsComboElement) },
-            //{ Items.SizeSelector.Type, typeof(SizeSelectorElement) },
-            //{ Items.UserNameTextBox.Type, typeof(UserNameTextBoxElement) },
-            //{ Items.KeyVaultCertificateSelector.Type, typeof(KeyVaultCertificateSelectorElement) },
-            //{ Items.IdentitySelector.Type, typeof(IdentitySelectorElement) },
-            //{ Items.PublicIpAddressCombo.Type, typeof(PublicIpAddressComboElement) },
-            //{ Items.VirtualNetworkCombo.Type, typeof(VirtualNetworkComboElement) },
-            //{ Items.ArmApiControl.Type, typeof(ArmApiControlElement) },
-            //{ Items.ResourceSelector.Type, typeof(ResourceSelectorElement) },
-            //{ Items.MultiStorageAccountCombo.Type, typeof(MultiStorageAccountComboElement) },
-            //{ Items.StorageAccountSelector.Type, typeof(StorageAccountSelectorElement) },
-            //{ Items.StorageBlobSelector.Type, typeof(StorageBlobSelectorElement) }
-        };
-
         public static class Groups
         {
             public static class Common

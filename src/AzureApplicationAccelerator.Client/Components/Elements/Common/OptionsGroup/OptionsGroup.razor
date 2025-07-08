@@ -1,0 +1,45 @@
+@using AzureApplicationAccelerator.Elements.Common
+
+<FluentStack>
+    @if (!string.IsNullOrEmpty(Element.Label))
+    {
+        <FluentLabel>
+            @Element.Label
+            @if (Element.Constraints.Required ?? false)
+            {
+                <p>*</p>
+            }
+        </FluentLabel>
+    }
+
+    <FluentRadioGroup @bind-Value="@_selectedValue" Orientation="Orientation.Vertical">
+        @foreach (var option in Element.Constraints.AllowedValues)
+        {
+            <FluentRadio Value="@option.Value">
+                @option.Label
+            </FluentRadio>
+        }
+    </FluentRadioGroup>
+</FluentStack>
+
+@code {
+    private string _selectedValue = string.Empty;
+
+    [Parameter]
+    public OptionsGroupElement Element { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        if (Element.Constraints.AllowedValues.Any())
+        {
+            // If a default value is specified then search by label; otherwise, use the first allowed option.
+            var defaultOption = Element.Constraints.AllowedValues.FirstOrDefault(x => x.Label == Element.DefaultValue);
+            _selectedValue = defaultOption?.Value ?? Element.Constraints.AllowedValues.First().Value;
+        }
+    }
+
+    private void OnSelectionChanged(string newValue)
+    {
+        _selectedValue = newValue;
+    }
+}

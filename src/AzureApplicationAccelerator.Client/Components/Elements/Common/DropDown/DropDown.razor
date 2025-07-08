@@ -31,30 +31,4 @@
 @code {
     [Parameter] public DropDownElement Element { get; set; } = default!;
     private FluentSelect<AllowedValue>? _fluentSelect;
-
-    protected override Task OnInitializedAsync()
-    {
-        // Ensure Constraints and AllowedValues are not null before accessing them
-        if (Element.DefaultValue != null && Element.DefaultValue.Count > 0)
-        {
-        }
-
-        Element.Constraints.AllowedValues.Add(new()
-        {
-            Value = "DefaultValue1",
-            Label = "Default Label 1",
-            Description = "This is the default description."
-        });
-
-        Element.Constraints.AllowedValues.Add(new()
-        {
-            Value = "DefaultValue2",
-            Label = "Default Label 2",
-            Description = "This is another default description."
-        });
-
-        StateHasChanged();
-
-        return base.OnInitializedAsync();
-    }
 }

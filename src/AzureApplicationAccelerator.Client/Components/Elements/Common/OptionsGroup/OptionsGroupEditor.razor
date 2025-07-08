@@ -1,0 +1,117 @@
+@using AzureApplicationAccelerator.Elements.Common
+
+<FluentAccordionItem Heading="Constraints">
+    <FluentIcon Value="@(new Icons.Regular.Size20.LockClosedRibbon())" Slot="start" Color="@Color.Neutral" />
+    <RequiredConstraint @bind-Required="Element.Constraints.Required" />
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Options">
+    <label class="mb-1" style="display: block; font-weight:600;">Allowed Values</label>
+    <PropertyDescription>
+        Define the options available. At least one option is required. The default value must match one of these option labels.
+    </PropertyDescription>
+    @if (Element?.Constraints?.AllowedValues != null && Element.Constraints.AllowedValues.Any())
+    {
+        <FluentDataGrid Items="Element.Constraints.AllowedValues.AsQueryable()" GridTemplateColumns="2fr 2fr 3fr 1fr" TGridItem="OptionItem" Class="mb-2">
+            <TemplateColumn Title="Display Label" Context="option" Style="height: auto;">
+                <FluentTextField @bind-Value="option.Label"
+                                 Id="@($"display-{Element.Id}")"
+                                 Placeholder="e.g., Value one"
+                                 Required="true" />
+                <FluentTooltip Anchor="@($"display-{Element.Id}")">
+                    The text displayed to the user for this option.
+                </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Title="Actual Value" Context="option" Style="height: auto;">
+                <FluentTextField @bind-Value="option.Value"
+                                 Id="@($"value-{Element.Id}")"
+                                 Placeholder="e.g., one"
+                                 Required="true" />
+                <FluentTooltip Anchor="@($"value-{Element.Id}")">
+                    The underlying value submitted for this option.
+                </FluentTooltip>
+            </TemplateColumn>
+            <TemplateColumn Title="Label" Context="option" Style="height: auto;">
+                <FluentTextArea @bind-Value="option.Label"
+                                Id="@($"desc-{Element.Id}")"
+                                Placeholder="Optional description"
+                                Rows="1" />
+                <FluentTooltip Anchor="@($"desc-{Element.Id}")">
+                    A label for this option.
+                </FluentTooltip>
+
+            </TemplateColumn>
+            <SelectColumn TGridItem="OptionItem" Title="Is default"
+                          SelectMode="DataGridSelectMode.Single"
+                          SelectFromEntireRow="false"
+                          OnSelect="@((e) => SetDefaultValue(e.Item))"
+                          Style="height: auto;"
+                          Property="IsDefault"
+                          Context="option"
+                          />
+            <TemplateColumn Title="Actions" Align="Align.End" Context="option" Style="height: auto;">
+                <FluentButton Appearance="Appearance.Lightweight"
+                              IconStart="@(new Icons.Regular.Size24.Delete())"
+                              OnClick="@(() => RemoveOption(option))"
+                              Title="Remove this option" />
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+    else
+    {
+        <p>No allowed values defined. Click "Add Allowed Value" to add items.</p>
+    }
+    <FluentButton Appearance="Appearance.Accent"
+                  IconStart="@(new Icons.Regular.Size16.Add())"
+                  OnClick="AddAllowedValue"
+                  Style="margin: 8px;">
+        Add Allowed Value
+    </FluentButton>
+</FluentAccordionItem>
+
+@code {
+    [Parameter] public OptionsGroupElement Element { get; set; } = default!;
+
+    private bool IsDefault(OptionItem item)
+    {
+        if (item is null) { return false; }
+        if (string.IsNullOrEmpty(Element.DefaultValue))
+        {
+            return false;
+        }
+        return Element.DefaultValue == item.Label;
+    }
+
+    private void SetDefaultValue(OptionItem item)
+    {
+        if (item is null) { return; }
+        if (Element.Constraints.AllowedValues == null)
+        {
+            Element.Constraints.AllowedValues = new List<OptionItem>();
+        }
+        var option = Element.Constraints.AllowedValues.FirstOrDefault(x => x.Value == item.Value);
+        if (option is null)
+        {
+            return;
+        }
+
+        Element.DefaultValue = option.Label;
+    }
+
+    private void AddAllowedValue()
+    {
+        if (Element.Constraints.AllowedValues == null)
+        {
+            Element.Constraints.AllowedValues = new List<OptionItem>();
+        }
+        Element.Constraints.AllowedValues.Add(new OptionItem { Label = string.Empty, Value = string.Empty });
+    }
+
+    private void RemoveOption(OptionItem option)
+    {
+        if (Element.Constraints.AllowedValues != null)
+        {
+            Element.Constraints.AllowedValues.Remove(option);
+        }
+    }
+}

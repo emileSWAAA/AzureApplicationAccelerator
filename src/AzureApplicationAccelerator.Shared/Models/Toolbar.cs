@@ -27,7 +27,7 @@ namespace AzureApplicationAccelerator.Shared.Models
         public UIElement ToUiElement()
         {
             ArgumentNullException.ThrowIfNull(this, nameof(ToolbarItem));
-            if (!ToolbarConstants.UIElementDictionary.TryGetValue(Type, out var elementType))
+            if (!AzureResourceUIConstants.TypeMapping.TryGetValue(Type, out var elementType))
             {
                 throw new ArgumentException($"Unknown toolbar item type: {elementType}");
             }

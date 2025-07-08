@@ -1,4 +1,7 @@
-﻿namespace AzureApplicationAccelerator.Elements
+﻿using AzureApplicationAccelerator.Elements.Common;
+using static AzureApplicationAccelerator.Elements.AzureResourceUIConstants.CreateUiDefinition;
+
+namespace AzureApplicationAccelerator.Elements
 {
     public class AzureResourceUIConstants
     {
@@ -16,6 +19,20 @@
                 public static Guid ReviewAndCreateId = Guid.Parse("4687DBA5-CF2F-40CB-ACF2-C8E338988ED8");
                 public static string ReviewAndCreateName = "Review and Create";
             }
+        }
+
+        public static readonly Dictionary<string, Type> TypeMapping = new()
+        {
+            { Elements.CheckBox.Type, typeof(CheckBoxElement) },
+            { Elements.DropDown.Type, typeof(DropDownElement) },
+            { Elements.FileUpload.Type, typeof(FileUploadElement) },
+            { Elements.InfoBox.Type, typeof(InfoBoxElement) },
+            { Elements.OptionsGroup.Type, typeof(OptionsGroupElement) }
+        };
+
+        public static Type? ResolveType(string typeName)
+        {
+            return TypeMapping.TryGetValue(typeName, out var type) ? type : null;
         }
 
         public static readonly Dictionary<string, string> ElementTypeInfoLinks = new Dictionary<string, string>

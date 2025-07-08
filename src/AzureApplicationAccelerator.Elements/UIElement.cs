@@ -2,7 +2,7 @@
 
 namespace AzureApplicationAccelerator.Elements
 {
-    public abstract class UIElement : IUIElement
+    public class UIElement : IUIElement
     {
         [JsonIgnore]
         public Guid Id { get; set; }

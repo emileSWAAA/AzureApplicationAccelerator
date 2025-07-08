@@ -2,6 +2,7 @@
 using AzureApplicationAccelerator.Client.Components.Elements.Common.DropDown;
 using AzureApplicationAccelerator.Client.Components.Elements.Common.FileUpload;
 using AzureApplicationAccelerator.Client.Components.Elements.Common.InfoBox;
+using AzureApplicationAccelerator.Client.Components.Elements.Common.OptionsGroup;
 using AzureApplicationAccelerator.Elements;
 
 namespace AzureApplicationAccelerator.Client
@@ -14,6 +15,7 @@ namespace AzureApplicationAccelerator.Client
             [AzureResourceUIConstants.Elements.DropDown.Type] = new(typeof(DropDown), typeof(DropDownEditor)),
             [AzureResourceUIConstants.Elements.FileUpload.Type] = new(typeof(FileUpload), typeof(FileUploadEditor)),
             [AzureResourceUIConstants.Elements.InfoBox.Type] = new(typeof(InfoBox), typeof(InfoBoxEditor)),
+            [AzureResourceUIConstants.Elements.OptionsGroup.Type] = new(typeof(OptionsGroup), typeof(OptionsGroupEditor)),
         };
     }
 

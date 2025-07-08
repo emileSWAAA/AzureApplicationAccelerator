@@ -33,13 +33,6 @@
 
     [Parameter] public FileUploadElement Element { get; set; } = default!;
 
-    protected override Task OnInitializedAsync()
-    {
-        UIDefinitionService.OnChange += StateHasChanged;
-
-        return base.OnInitializedAsync();
-    }
-
     private void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
     {
         if (files == null || !files.Any())

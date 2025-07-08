@@ -3,6 +3,7 @@
 @using AzureApplicationAccelerator.Shared.Validators
 @inject UIDefinitionService DefinitionService
 @inject IDialogService DialogService
+@inject IToastService ToastService
 
 <FluentTabs @bind-ActiveTabId="@SelectedTabId"
             OnTabClose="@RemoveTab"
@@ -69,19 +70,20 @@
             PreventScroll = true
         };
 
-        var newName = new DialogName() { Title = string.Empty };
+        var newName = new DialogContent() { Title = string.Empty };
         var dialog = await DialogService.ShowDialogAsync<NewStepDialog>(newName, parameters);
         var result = await dialog.Result as DialogResult;
         if (result?.Data is not null)
         {
-            var res = result.Data as DialogName;
+            var res = result.Data as DialogContent;
             var tabName = res.Title;
             if (DefinitionService.Definition.Parameters.Steps.Any(s => s.Name.Equals(tabName, StringComparison.OrdinalIgnoreCase)))
             {
-
+                ToastService.ShowError("A step with this name already exists. Please choose a different name.");
+                return;
             }
 
-            await DefinitionService.AddStepAsync(tabName);
+            await DefinitionService.AddStepAsync(new StepDto() { Title = res.Title, Label = res.Label});
         }
         else
         {
@@ -89,9 +91,11 @@
         }
     }
 
-    public class DialogName
+    public class DialogContent
     {
         [StepValidator]
         public string Title { get; set; } = string.Empty;
+
+        public string Label { get; set; } = string.Empty;
     }
 }

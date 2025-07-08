@@ -1,4 +1,5 @@
 ﻿using AzureApplicationAccelerator.Elements;
+using AzureApplicationAccelerator.Shared.Extensions;
 using AzureApplicationAccelerator.Shared.Models;
 using Microsoft.JSInterop;
 
@@ -28,7 +29,7 @@ namespace AzureApplicationAccelerator.Shared.Services
         public async Task ClearAsync()
         {
             Definition = new CreateUIDefinition();
-            //await _js.SetItemAsync(StorageKey, Definition);
+            await _js.SetItemAsync(StorageKey, Definition);
             NotifyChanged();
         }
 
@@ -75,20 +76,28 @@ namespace AzureApplicationAccelerator.Shared.Services
 
         private async Task PersistAsync()
         {
-            //await _js.SetItemAsync(StorageKey, Definition);
+            await _js.SetItemAsync(StorageKey, Definition);
         }
 
         private void NotifyChanged() => OnChange?.Invoke();
 
-        public async Task AddStepAsync(string title)
+        public async Task AddStepAsync(StepDto step)
         {
-            if (Definition.Parameters.Steps.Any(s => s.Name.Equals(title, StringComparison.OrdinalIgnoreCase)) ||
-                string.IsNullOrWhiteSpace(title))
+            if (step == null)
+            {
+                throw new ArgumentNullException(nameof(step), "Step cannot be null.");
+            }
+            if (Definition.Parameters.Steps.Any(s => s.Name.Equals(step.Title, StringComparison.OrdinalIgnoreCase)) ||
+                string.IsNullOrWhiteSpace(step.Title))
             {
                 return;
             }
 
-            Definition.Parameters.Steps.Add(new Step { Name = title });
+            Definition.Parameters.Steps.Add(new Step { 
+                Name = step.Title,
+                BladeTitle = step.Title,
+                Label = step.Label 
+            });
             await PersistAsync();
             NotifyChanged();
         }
