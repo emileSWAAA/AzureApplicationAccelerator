@@ -1,12 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using AzureApplicationAccelerator.Elements.Converters;
+using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements
 {
+    [JsonConverter(typeof(UIElementJsonConverter))]
     public class UIElement : IUIElement
     {
-        [JsonIgnore]
-        public Guid Id { get; set; }
-
         [JsonPropertyOrder(1)]
         [JsonPropertyName("name")]
         public string Name { get; set; }
@@ -26,6 +25,14 @@ namespace AzureApplicationAccelerator.Elements
         [JsonPropertyOrder(5)]
         [JsonPropertyName("toolTip")]
         public string? ToolTip { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is UIElement element &&
+                   Name == element.Name &&
+                   Type == element.Type &&
+                   Label == element.Label;
+        }
     }
 
     public class AllowedValue

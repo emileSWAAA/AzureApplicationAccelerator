@@ -16,12 +16,12 @@
                      DragDropZoneVisible="false"
                      Mode="InputFileMode.Buffer"
                      Accept="@AcceptedFileTypes"
-                     AnchorId="@($"fileUpload-{Element.Id}")"
+                     AnchorId="@($"fileUpload-{Element.GetHashCode()}")"
                      OnCompleted="OnCompleted" />
 
     <FluentTextField Value="@(string.Join(" ,", _fileNames))">
     </FluentTextField>
-    <FluentButton Id="@($"fileUpload-{Element.Id}")"
+    <FluentButton Id="@($"fileUpload-{Element.GetHashCode()}")"
                   Appearance="Appearance.Accent"
                   IconEnd="@(new Icons.Regular.Size24.FolderArrowUp())" />
 </FluentStack>

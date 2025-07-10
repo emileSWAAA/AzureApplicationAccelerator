@@ -77,9 +77,12 @@
     {
         try
         {
-            if (Element == null) return;
+            if (Element == null)
+            {
+                return;
+            }
 
-            await DefinitionService.RemoveElementAsync(Element.Id);
+            await DefinitionService.RemoveElementAsync(Element);
             ToastService.ShowSuccess("Element removed");
         }
         catch (Exception ex)

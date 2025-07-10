@@ -20,8 +20,26 @@ namespace AzureApplicationAccelerator.Shared.Services
 
         public async Task InitializeAsync()
         {
-            //var stored = await _js.GetItemAsync<CreateUIDefinition>(StorageKey);
-            Definition = new CreateUIDefinition();
+            var stored = await _js.GetItemAsync<CreateUIDefinition>(StorageKey);
+            if (stored is not null)
+            {
+                Definition = stored;
+            }
+            else
+            {
+                // If no stored definition, create a new one with the basics step.
+                Definition = new CreateUIDefinition
+                {
+                    Parameters = new Parameters
+                    {
+                        Basics = new Step
+                        {
+                            Id = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId,
+                            Name = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName
+                        }
+                    }
+                };
+            }
             ActiveStep = Definition.Parameters.Basics;
             NotifyChanged();
         }
@@ -33,43 +51,38 @@ namespace AzureApplicationAccelerator.Shared.Services
             NotifyChanged();
         }
 
-        public async Task SwapElements(Guid elementId1, Guid elementId2)
+        public async Task InsertAtAsync(UIElement element, int targetIndex)
         {
-            if (elementId1 == Guid.Empty ||
-                elementId2 == Guid.Empty ||
-                elementId1 == elementId2)
+            if (element is null)
             {
-                throw new ArgumentException("Element IDs cannot be empty or equal.");
+                throw new ArgumentNullException(nameof(element), "Element cannot be null.");
             }
 
             var step = ActiveStep;
-            if (step.Elements == null || step.Elements.Count < 2)
+            if (step.Elements == null || step.Elements.Count == 0)
             {
-                throw new InvalidOperationException("Step must contain at least two elements to swap.");
+                throw new InvalidOperationException("Step must contain at least one element.");
             }
 
-            var element1 = step.Elements.FirstOrDefault(e => e.Id == elementId1);
-            var element2 = step.Elements.FirstOrDefault(e => e.Id == elementId2);
-            if (element1 is null || element2 is null)
+            var currentIndex = step.Elements.IndexOf(element);
+            if (currentIndex == -1)
             {
-                throw new InvalidOperationException("One or both elements not found in the step.");
+                throw new InvalidOperationException("Element not found in the step.");
             }
 
-            var index1 = step.Elements.IndexOf(element1);
-            var index2 = step.Elements.IndexOf(element2);
-
-            if (index1 == -1 || index2 == -1)
+            if (targetIndex < 0 || targetIndex >= step.Elements.Count)
             {
-                throw new InvalidOperationException("One or both element indices not found.");
+                throw new ArgumentOutOfRangeException(nameof(targetIndex), "Target index is out of range.");
             }
 
-            if (index1 == index2)
+            if (currentIndex == targetIndex)
             {
-                throw new InvalidOperationException("Elements are at the same position; cannot swap.");
+                return;
             }
 
-            step.Elements[index1] = element2;
-            step.Elements[index2] = element1;
+            step.Elements.RemoveAt(currentIndex);
+            step.Elements.Insert(targetIndex, element);
+
             await PersistAsync();
             NotifyChanged();
         }
@@ -187,7 +200,7 @@ namespace AzureApplicationAccelerator.Shared.Services
                 throw new InvalidOperationException("No active step to update the element in.");
             }
 
-            var existingElement = ActiveStep.Elements.FirstOrDefault(e => e.Id == element.Id);
+            var existingElement = ActiveStep.Elements.FirstOrDefault(e => e == element);
             if (existingElement is not null)
             {
                 existingElement = element;
@@ -197,10 +210,15 @@ namespace AzureApplicationAccelerator.Shared.Services
             }
         }
 
-        public async Task RemoveElementAsync(Guid elementId)
+        public async Task RemoveElementAsync(UIElement element)
         {
+            if (element is null) 
+            {
+                throw new ArgumentNullException(nameof(element), "Element cannot be null.");
+            }
+
             if (ActiveStep is not null &&
-                ActiveStep.Elements.FirstOrDefault(e => e.Id == elementId) is UIElement element)
+                ActiveStep.Elements.Any(e => e == element))
             {
                 ActiveStep.Elements.Remove(element);
                 await PersistAsync();

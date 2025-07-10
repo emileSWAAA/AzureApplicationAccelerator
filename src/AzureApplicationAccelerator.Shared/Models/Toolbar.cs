@@ -45,7 +45,6 @@ namespace AzureApplicationAccelerator.Shared.Models
             uIElement.Name = Name;
             uIElement.Label = Label;
             uIElement.Type = Type;
-            uIElement.Id = Guid.NewGuid();
             uIElement.Visible = true;
 
             return uIElement;

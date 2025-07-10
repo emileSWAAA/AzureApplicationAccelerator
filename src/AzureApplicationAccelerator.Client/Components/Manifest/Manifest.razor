@@ -3,9 +3,37 @@
 @using System.Text.Json.Serialization
 @inject UIDefinitionService DefinitionService
 
-<pre>@DefinitionJson</pre>
+<StandaloneCodeEditor Id="defintion-manifest"
+                      ConstructionOptions="EditorConstructionOptions"
+                      CssClass="manifest-editor"
+                      @ref="@standaloneCodeEditor" />
+
+<style>
+    .manifest-editor {
+        height: 100%;
+    }
+</style>
 
 @code {
+    private StandaloneCodeEditor standaloneCodeEditor = new StandaloneCodeEditor();
+    private StandaloneEditorConstructionOptions constructionOptions = new StandaloneEditorConstructionOptions
+    {
+        AutomaticLayout = true,
+        Language = "json",
+        ReadOnly = true
+    };
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(StandaloneCodeEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "json",
+            Value = DefinitionJson,
+            ReadOnly = true
+        };
+    }
+
     public string DefinitionJson { get; set; }
 
     protected override void OnInitialized()
@@ -29,6 +57,8 @@
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
             Converters = { new UIElementJsonConverter(), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         });
+
+        standaloneCodeEditor?.SetValue(DefinitionJson);
     }
 
     public void Dispose()

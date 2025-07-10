@@ -30,11 +30,6 @@ namespace AzureApplicationAccelerator.Elements
             { Elements.OptionsGroup.Type, typeof(OptionsGroupElement) }
         };
 
-        public static Type? ResolveType(string typeName)
-        {
-            return TypeMapping.TryGetValue(typeName, out var type) ? type : null;
-        }
-
         public static readonly Dictionary<string, string> ElementTypeInfoLinks = new Dictionary<string, string>
         {
             { Elements.CheckBox.Type, Elements.CheckBox.InfoLink },

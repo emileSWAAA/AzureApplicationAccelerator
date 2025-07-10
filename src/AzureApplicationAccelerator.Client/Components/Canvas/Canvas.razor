@@ -14,7 +14,7 @@
                         Handle="true" 
                         Class="canvas-container">
         <ItemTemplate>
-            <CanvasItem Element="@context" @key="@context.Id" />
+            <CanvasItem Element="@context" @key="@context.GetHashCode()" />
         </ItemTemplate>
     </FluentSortableList>
 </div>
@@ -34,6 +34,6 @@
         var oldElement = DefinitionService.ActiveStep.Elements[oldIndex];
         var newElement = DefinitionService.ActiveStep.Elements[newIndex];
 
-        await DefinitionService.SwapElements(oldElement.Id, newElement.Id);
+        await DefinitionService.InsertAtAsync(oldElement, newIndex);
     }
 }

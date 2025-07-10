@@ -15,28 +15,28 @@
         <FluentDataGrid Items="Element.Constraints.AllowedValues.AsQueryable()" GridTemplateColumns="2fr 2fr 3fr 1fr" TGridItem="OptionItem" Class="mb-2">
             <TemplateColumn Title="Display Label" Context="option" Style="height: auto;">
                 <FluentTextField @bind-Value="option.Label"
-                                 Id="@($"display-{Element.Id}")"
+                                 Id="@($"display-{Element.GetHashCode()}")"
                                  Placeholder="e.g., Value one"
                                  Required="true" />
-                <FluentTooltip Anchor="@($"display-{Element.Id}")">
+                <FluentTooltip Anchor="@($"display-{Element.GetHashCode()}")">
                     The text displayed to the user for this option.
                 </FluentTooltip>
             </TemplateColumn>
             <TemplateColumn Title="Actual Value" Context="option" Style="height: auto;">
                 <FluentTextField @bind-Value="option.Value"
-                                 Id="@($"value-{Element.Id}")"
+                                 Id="@($"value-{Element.GetHashCode()}")"
                                  Placeholder="e.g., one"
                                  Required="true" />
-                <FluentTooltip Anchor="@($"value-{Element.Id}")">
+                <FluentTooltip Anchor="@($"value-{Element.GetHashCode()}")">
                     The underlying value submitted for this option.
                 </FluentTooltip>
             </TemplateColumn>
             <TemplateColumn Title="Label" Context="option" Style="height: auto;">
                 <FluentTextArea @bind-Value="option.Label"
-                                Id="@($"desc-{Element.Id}")"
+                                Id="@($"desc-{Element.GetHashCode()}")"
                                 Placeholder="Optional description"
                                 Rows="1" />
-                <FluentTooltip Anchor="@($"desc-{Element.Id}")">
+                <FluentTooltip Anchor="@($"desc-{Element.GetHashCode()}")">
                     A label for this option.
                 </FluentTooltip>
 
