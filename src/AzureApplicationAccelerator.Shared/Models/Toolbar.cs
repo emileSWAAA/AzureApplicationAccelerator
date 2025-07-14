@@ -1,28 +1,27 @@
 ﻿using AzureApplicationAccelerator.Elements;
-using AzureApplicationAccelerator.Shared.Constants;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 namespace AzureApplicationAccelerator.Shared.Models
 {
     public class Toolbar
     {
-        public IEnumerable<ToolbarGroup> Groups { get; set; }
+        public required IEnumerable<ToolbarGroup> Groups { get; set; }
     }
 
     public class ToolbarGroup
     {
-        public string Name { get; set; }
-        public string Label { get; set; }
-        public Icon Icon { get; set; }
-        public IList<ToolbarItem> Items { get; set; }
+        public required string Name { get; set; }
+        public required string Label { get; set; }
+        public required Icon Icon { get; set; }
+        public required IList<ToolbarItem> Items { get; set; }
     }
 
     public class ToolbarItem
     {
-        public string Name { get; set; }
-        public string Label { get; set; }
-        public Icon Icon { get; set; }
-        public string Type { get; set; }
+        public required string Name { get; set; }
+        public required string Label { get; set; }
+        public required Icon Icon { get; set; }
+        public required string Type { get; set; }
 
         public UIElement ToUiElement()
         {

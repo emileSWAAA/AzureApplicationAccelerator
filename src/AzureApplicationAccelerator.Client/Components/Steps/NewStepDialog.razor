@@ -1,6 +1,8 @@
-﻿@implements IDialogContentComponent<DialogContent>
+﻿@implements IDialogContentComponent<StepDialogParameters>
 @using Microsoft.FluentUI.AspNetCore.Components
-@using static AzureApplicationAccelerator.Client.Components.Steps.StepsNavigation
+@using static AzureApplicationAccelerator.Client.Components.Steps.NewStepDialog
+@inject IToastService ToastService
+@inject UIDefinitionService DefinitionService
 
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -18,9 +20,9 @@
             The step title must be unique and not empty.
         </FluentLabel>
 
-        <FluentTextField @bind-Value="@Content.Title" Required Label="Title" />
-
+        <FluentTextField @bind-Value="@Content.Name" Required Label="Name" />
         <FluentTextField @bind-Value="@Content.Label" Required Label="Label" />
+        <FluentTextField @bind-Value="@Content.BladeTitle" Label="Blade title" />
 
         <div style="color: var(--error);">
             <FluentValidationSummary />
@@ -44,7 +46,7 @@
     private EditContext _editContext = default!;
 
     [Parameter]
-    public DialogContent Content { get; set; } = default!;
+    public StepDialogParameters Content { get; set; } = default!;
 
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
@@ -58,6 +60,14 @@
     {
         if (_editContext.Validate())
         {
+            if (await DefinitionService.GetStep(Content.Name) is not null &&
+                !Content.IsEdit)
+            {
+                ToastService.ShowError("A step with this name already exists. Please choose a different name.");
+                await Dialog.CancelAsync();
+                return;
+            }
+
             await Dialog.CloseAsync(Content);
         }
     }
@@ -65,5 +75,13 @@
     private async Task CancelAsync()
     {
         await Dialog.CancelAsync();
+    }
+
+    public class StepDialogParameters
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+        public string BladeTitle { get; set; } = string.Empty;
+        public bool IsEdit { get; set; } = false;
     }
 }

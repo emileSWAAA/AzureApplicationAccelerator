@@ -17,8 +17,7 @@ namespace AzureApplicationAccelerator.Elements
         [JsonConverter(typeof(BasicsStepConverter))]
         public Step Basics { get; set; } = new()
         {
-            Id = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId,
-            Name = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName
+            Name = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName,
         };
 
         public IList<Step> Steps { get; set; } = new List<Step>();
@@ -29,14 +28,23 @@ namespace AzureApplicationAccelerator.Elements
 
     public class Step
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
-        public string Label { get; set; }
-        public Sublabel SubLabel { get; set; }
-        public string BladeTitle { get; set; }
-
+        public string? Label { get; set; }
+        public Sublabel? SubLabel { get; set; }
+        public string? BladeTitle { get; set; }
 
         public IList<UIElement> Elements { get; set; } = new List<UIElement>();
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Step step && 
+                string.Equals(step.Name, Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Label, BladeTitle);
+        }
     }
 
     public class Sublabel

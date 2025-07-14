@@ -8,11 +8,11 @@ namespace AzureApplicationAccelerator.Elements
     {
         [JsonPropertyOrder(1)]
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [JsonPropertyOrder(2)]
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public required string Type { get; set; }
 
         [JsonPropertyOrder(3)]
         [JsonPropertyName("description")]
@@ -29,19 +29,23 @@ namespace AzureApplicationAccelerator.Elements
         public override bool Equals(object? obj)
         {
             return obj is UIElement element &&
-                   Name == element.Name &&
-                   Type == element.Type &&
-                   Label == element.Label;
+                string.Equals(Name, element.Name, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Type, element.Type, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Label, element.Label, StringComparison.OrdinalIgnoreCase);
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Type, Label);
         }
     }
 
     public class AllowedValue
     {
         [JsonPropertyName("label")]
-        public string Label { get; set; }
+        public required string Label { get; set; }
 
         [JsonPropertyName("value")]
-        public string Value { get; set; }
+        public required string Value { get; set; }
 
         [JsonPropertyName("description")]
         public string? Description { get; set; }

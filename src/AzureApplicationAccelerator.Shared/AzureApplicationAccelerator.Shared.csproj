@@ -16,4 +16,8 @@
 	  <ProjectReference Include="..\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Validators\" />
+	</ItemGroup>
+
 </Project>

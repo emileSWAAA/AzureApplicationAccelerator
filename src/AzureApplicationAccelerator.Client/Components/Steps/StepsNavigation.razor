@@ -1,101 +1,143 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using AzureApplicationAccelerator.Elements
-@using AzureApplicationAccelerator.Shared.Validators
+@using static AzureApplicationAccelerator.Client.Components.Steps.NewStepDialog
 @inject UIDefinitionService DefinitionService
 @inject IDialogService DialogService
 @inject IToastService ToastService
 
 <FluentTabs @bind-ActiveTabId="@SelectedTabId"
-            OnTabClose="@RemoveTab"
             Size="TabSize.Large"
             OnTabChange="@((tab) => SelectStep(tab))">
     <FluentTab @key="@DefinitionService.Definition.Parameters.Basics.Name"
                Label="@AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName"
-               Id="@($"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId}")"
+               Id="@($"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName}")"
                Data="@DefinitionService.Definition.Parameters.Basics" />
 
     @foreach (var step in DefinitionService.Definition.Parameters.Steps)
     {
-        <FluentTab @bind-Label="@step.Name" Id="@($"step_{step.Id.ToString()}")" />
+        <FluentTab @bind-Label="@step.Name" Id="@($"step_{step.Name}")">
+            <Header>
+                <div style="display: flex;">
+                    @step.Label
+                    <FluentSpacer Width="10" />
+                    <FluentIcon Value="@(new Icons.Filled.Size12.Edit())"
+                                OnClick="@(() => OpenDialogAsync(step))" />
+                </div>
+            </Header>
+        </FluentTab>
+
     }
 
     <div slot="start">
-        <FluentButton OnClick="@OpenDialogAsync"
+        <FluentButton OnClick="OpenDialogAsync"
                       IconStart="@(new Icons.Regular.Size24.AddCircle())"
                       Appearance="Appearance.Accent" />
     </div>
 </FluentTabs>
 
 @code {
-    public string SelectedTabId = $"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId}";
-
-    private FluentTabs _fluentTabs = default!;
+    public string SelectedTabId = $"step_{AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName}";
 
     private async Task SelectStep(FluentTab tab)
     {
-        // Logic to change the active step can be added here
         var activeTab = tab;
         if (activeTab is null || activeTab.Label.Equals(DefinitionService.ActiveStep.Name, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
 
-        Guid stepId = Guid.Parse(activeTab.Id.Split('_')[1]);
-        await DefinitionService.SetActiveStepAsync(stepId);
-    }
-
-    private async Task RemoveTab(FluentTab tabPanel)
-    {
-        if (tabPanel is null)
+        if (await DefinitionService.GetStep(tab.Label) is not Step step)
         {
-            // TODO: snackbar error
+            ToastService.ShowError($"Step '{activeTab.Label}' not found.");
             return;
         }
 
-        if (DefinitionService.ActiveStep is not null)
-        {
-            await DefinitionService.RemoveStepAsync(DefinitionService.ActiveStep.Id);
-        }
+        await DefinitionService.SetActiveStepAsync(step);
     }
 
     private async Task OpenDialogAsync()
     {
-        DialogParameters parameters = new()
-        {
-            Title = "Create a new step",
-            PrimaryAction = "Save",
-            PrimaryActionEnabled = true,
-            SecondaryAction = "No",
-            Width = "500px",
-            PreventScroll = true
-        };
+        var step = new Step() { Name = string.Empty, Label = string.Empty };
+        await OpenDialogAsync(step);
+    }
 
-        var newName = new DialogContent() { Title = string.Empty };
-        var dialog = await DialogService.ShowDialogAsync<NewStepDialog>(newName, parameters);
-        var result = await dialog.Result as DialogResult;
-        if (result?.Data is not null)
+    private async Task OpenDialogAsync(Step step)
+    {
+        if (GetStepParameters(step) is not StepDialogParameters stepParameters ||
+              GetDialogParameters(stepParameters) is not DialogParameters dialogParameters)
         {
-            var res = result.Data as DialogContent;
-            var tabName = res.Title;
-            if (DefinitionService.Definition.Parameters.Steps.Any(s => s.Name.Equals(tabName, StringComparison.OrdinalIgnoreCase)))
-            {
-                ToastService.ShowError("A step with this name already exists. Please choose a different name.");
-                return;
-            }
-
-            await DefinitionService.AddStepAsync(new StepDto() { Title = res.Title, Label = res.Label});
+            throw new InvalidOperationException("Failed to create parameters.");
         }
-        else
+
+        var dialog = await DialogService.ShowDialogAsync<NewStepDialog>(stepParameters, dialogParameters);
+        var result = await dialog.Result as DialogResult;
+        try
         {
-            Console.WriteLine($"Dialog closed - Canceled: {result.Cancelled}");
+            await HandleDialogResultAsync(result, step.Name, stepParameters);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"An error occurred while processing the dialog: {ex.Message}");
         }
     }
 
-    public class DialogContent
+    private static DialogParameters GetDialogParameters(StepDialogParameters stepParameters)
     {
-        [StepValidator]
-        public string Title { get; set; } = string.Empty;
+        return new DialogParameters()
+        {
+            Title = stepParameters.IsEdit ? $"Edit {stepParameters.Name}" : "Create a new step",
+            PrimaryAction = stepParameters.IsEdit ? "Edit" : "Save",
+            PrimaryActionEnabled = true,
+            SecondaryAction = "Cancel",
+            Width = "500px",
+            PreventScroll = true
+        };
+    }
 
-        public string Label { get; set; } = string.Empty;
+    private static StepDialogParameters GetStepParameters(Step step) =>
+        new StepDialogParameters()
+        {
+            Name = step.Name,
+            Label = step.Label ?? string.Empty,
+            BladeTitle = step.BladeTitle ?? string.Empty,
+            IsEdit = !string.IsNullOrEmpty(step.Name)
+        };
+
+    private async Task HandleDialogResultAsync(DialogResult result, string stepName, StepDialogParameters stepDialogParameters)
+    {
+        if (result?.Data is not StepDialogParameters dialogData ||
+            result.Cancelled)
+        {
+            ToastService.ShowError("Dialog was cancelled or returned no data.");
+            return;
+        }
+
+        try
+        {
+            var tabName = dialogData.Name;
+            if (stepDialogParameters.IsEdit)
+            {
+                await DefinitionService.EditStepAsync(stepName, MapToStep(dialogData));
+            }
+            else
+            {
+                await DefinitionService.AddStepAsync(MapToStep(dialogData));
+            }
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError($"Failed to {(stepDialogParameters.IsEdit ? "edit" : "create")} step '{dialogData.Name}'.");
+        }
+    }
+
+    private static Step MapToStep(StepDialogParameters parameters)
+    {
+        ArgumentNullException.ThrowIfNull(parameters, nameof(parameters));
+        return new Step
+        {
+            Name = parameters.Name,
+            Label = parameters.Label,
+            BladeTitle = parameters.BladeTitle
+        };
     }
 }

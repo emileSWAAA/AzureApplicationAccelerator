@@ -16,7 +16,11 @@ namespace AzureApplicationAccelerator.Shared.Services
 
         public event Action? OnChange;
 
-        public UIDefinitionService(IJSRuntime js) => _js = js;
+        public UIDefinitionService(IJSRuntime js)
+        {
+            _js = js;
+            ActiveStep = Definition.Parameters.Basics;
+        }
 
         public async Task InitializeAsync()
         {
@@ -25,22 +29,7 @@ namespace AzureApplicationAccelerator.Shared.Services
             {
                 Definition = stored;
             }
-            else
-            {
-                // If no stored definition, create a new one with the basics step.
-                Definition = new CreateUIDefinition
-                {
-                    Parameters = new Parameters
-                    {
-                        Basics = new Step
-                        {
-                            Id = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId,
-                            Name = AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName
-                        }
-                    }
-                };
-            }
-            ActiveStep = Definition.Parameters.Basics;
+
             NotifyChanged();
         }
 
@@ -94,31 +83,69 @@ namespace AzureApplicationAccelerator.Shared.Services
 
         private void NotifyChanged() => OnChange?.Invoke();
 
-        public async Task AddStepAsync(StepDto step)
+        public async Task<Step> GetStep(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Step name cannot be null or empty.", nameof(name));
+            }
+
+            if (name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
+            {
+                return Definition.Parameters.Basics;
+            }
+
+            return Definition.Parameters.Steps.SingleOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task AddStepAsync(Step step)
         {
             if (step == null)
             {
                 throw new ArgumentNullException(nameof(step), "Step cannot be null.");
             }
-            if (Definition.Parameters.Steps.Any(s => s.Name.Equals(step.Title, StringComparison.OrdinalIgnoreCase)) ||
-                string.IsNullOrWhiteSpace(step.Title))
+            if (string.IsNullOrWhiteSpace(step.Name) ||
+                await GetStep(step.Name) != null)
             {
                 return;
             }
 
-            Definition.Parameters.Steps.Add(new Step { 
-                Name = step.Title,
-                BladeTitle = step.Title,
-                Label = step.Label 
-            });
+            Definition.Parameters.Steps.Add(step);
             await PersistAsync();
             NotifyChanged();
         }
 
-        public async Task RemoveStepAsync(Guid stepId)
+        public async Task<Step> EditStepAsync(string stepName, Step updatedStep)
         {
-            if (Definition.Parameters.Steps.FirstOrDefault(s => s.Id == stepId) is not Step step ||
-                stepId.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId))
+            ArgumentNullException.ThrowIfNull(updatedStep);
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(stepName, nameof(stepName));
+
+            if (updatedStep.Name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase) ||
+                stepName.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("Basics step cannot be edited.");
+            }
+
+            if (await GetStep(stepName) is not Step existingStep)
+            {
+                throw new InvalidOperationException($"Step with name '{updatedStep.Name}' does not exist.");
+            }
+
+            existingStep.Name = updatedStep.Name;
+            existingStep.Label = updatedStep.Label;
+            existingStep.SubLabel = updatedStep.SubLabel;
+            existingStep.BladeTitle = updatedStep.BladeTitle;
+
+            await PersistAsync();
+            NotifyChanged();
+
+            return existingStep;
+        }
+
+        public async Task RemoveStepAsync(Step step)
+        {
+            if (!Definition.Parameters.Steps.Any(s => s == step) ||
+                step.Name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
@@ -128,14 +155,15 @@ namespace AzureApplicationAccelerator.Shared.Services
             NotifyChanged();
         }
 
-        public async Task SetActiveStepAsync(Guid stepId)
+        public async Task SetActiveStepAsync(Step step)
         {
-            if (stepId == AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsId)
+            if (step is null) { return; }
+            if (step.Name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
             {
                 ActiveStep = Definition.Parameters.Basics;
             }
 
-            if (Definition.Parameters.Steps.FirstOrDefault(s => s.Id == stepId) is Step step)
+            if (Definition.Parameters.Steps.Any(s => s == step))
             {
                 ActiveStep = step;
             }
@@ -212,7 +240,7 @@ namespace AzureApplicationAccelerator.Shared.Services
 
         public async Task RemoveElementAsync(UIElement element)
         {
-            if (element is null) 
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element), "Element cannot be null.");
             }

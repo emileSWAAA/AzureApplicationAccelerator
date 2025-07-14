@@ -14,6 +14,8 @@ builder.Services.AddFluentUIComponents(options =>
     options.ValidateClassNames = false;
 });
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 builder.Services.AddScoped<UIDefinitionService>();
 
 var app = builder.Build();
