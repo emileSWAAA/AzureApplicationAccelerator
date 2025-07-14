@@ -3,6 +3,7 @@
 @using static AzureApplicationAccelerator.Client.Components.Steps.NewStepDialog
 @inject IToastService ToastService
 @inject UIDefinitionService DefinitionService
+@inject IDialogService DialogService
 
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -31,15 +32,30 @@
 </FluentDialogBody>
 
 <FluentDialogFooter>
-    <FluentButton Appearance="Appearance.Accent"
-                  Disabled="@(!_editContext.Validate())"
-                  OnClick="@SaveAsync">
-        Save
-    </FluentButton>
-    <FluentButton Appearance="Appearance.Neutral"
-                  OnClick="@CancelAsync">
-        Cancel
-    </FluentButton>
+    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.SpaceBetween" Style="width: 100%;">
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="0">
+            @if (Content.IsEdit)
+            {
+                <FluentButton BackgroundColor="var(--error)"
+                              Color="white"
+                              OnClick="@ShowDeleteConfirmationAsync"
+                              IconStart="@(new Icons.Filled.Size20.Delete().WithColor("white"))">
+                    Delete
+                </FluentButton>
+            }
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8">
+            <FluentButton Appearance="Appearance.Accent"
+                          Disabled="@(!_editContext.Validate())"
+                          OnClick="@SaveAsync">
+                Save
+            </FluentButton>
+            <FluentButton Appearance="Appearance.Neutral"
+                          OnClick="@CancelAsync">
+                Cancel
+            </FluentButton>
+        </FluentStack>
+    </FluentStack>
 </FluentDialogFooter>
 
 @code {
@@ -77,11 +93,28 @@
         await Dialog.CancelAsync();
     }
 
+    private async Task ShowDeleteConfirmationAsync()
+    {
+        var dialog = await DialogService.ShowConfirmationAsync(
+            "Are you sure you want to delete this step?",
+            "Yes",
+            "No",
+            "Delete Step");
+
+        var result = await dialog.Result;
+        if (result is not null)
+        {
+            Content.IsDeleted = true;
+            await Dialog.CloseAsync(Content);
+        }
+    }
+
     public class StepDialogParameters
     {
         public string Name { get; set; } = string.Empty;
         public string Label { get; set; } = string.Empty;
         public string BladeTitle { get; set; } = string.Empty;
         public bool IsEdit { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }

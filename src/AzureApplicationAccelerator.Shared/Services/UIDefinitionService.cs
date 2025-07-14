@@ -142,15 +142,18 @@ namespace AzureApplicationAccelerator.Shared.Services
             return existingStep;
         }
 
-        public async Task RemoveStepAsync(Step step)
+        public async Task RemoveStepAsync(string stepName)
         {
-            if (!Definition.Parameters.Steps.Any(s => s == step) ||
-                step.Name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(stepName);
+
+            if (await GetStep(stepName) is not Step stepToDelete ||
+                stepName.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase) ||
+                stepToDelete.Name.Equals(AzureResourceUIConstants.CreateUiDefinition.Steps.BasicsName, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
-            Definition.Parameters.Steps.Remove(step);
+            Definition.Parameters.Steps.Remove(stepToDelete);
             await PersistAsync();
             NotifyChanged();
         }

@@ -115,6 +115,12 @@
         try
         {
             var tabName = dialogData.Name;
+            if (stepDialogParameters.IsDeleted)
+            {
+                await DefinitionService.RemoveStepAsync(stepName);
+                ToastService.ShowSuccess($"Step {stepName} has been deleted.");
+                return;
+            }
             if (stepDialogParameters.IsEdit)
             {
                 await DefinitionService.EditStepAsync(stepName, MapToStep(dialogData));
