@@ -28,6 +28,7 @@ namespace AzureApplicationAccelerator.Shared.Services
             if (stored is not null)
             {
                 Definition = stored;
+                ActiveStep = Definition.Parameters.Basics;
             }
 
             NotifyChanged();
