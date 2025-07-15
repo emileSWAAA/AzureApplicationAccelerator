@@ -8,6 +8,12 @@
 
 Creating Azure Marketplace Applications often involves dealing with the complex and verbose `CreateUIDefinition.json` schema. This repository is designed to make that process significantly easier and more efficient. By providing a modern, intuitive UI builder, developers and solution architects can visually construct Azure UI definitions without needing to hand-code JSON. Whether you're configuring a single resource selector or a full multi-step form, this tool empowers you to rapidly prototype and produce valid, production-ready definitions with minimal effort and high confidence.
 
+## Live site
+
+You can already use the application through this live website.
+Please be aware, this project is under construction and thus bugs and changes are due to be made frequently.
+[Demo](https://amp-accelerator-hmhch0fuejbydpdb.swedencentral-01.azurewebsites.net/)
+
 ## Table of Contents
 
 * [Overview](#overview)
