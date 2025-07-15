@@ -15,7 +15,7 @@
 </FluentDialogHeader>
 
 <FluentDialogBody>
-    <FluentAccordion ActiveId="@_activeAccordionItem">
+    <FluentAccordion ActiveId="@_activeAccordionItem" ExpandMode="AccordionExpandMode.Single">
         <DefaultProperties Element="Content" />
 
         @if (ElementRegistry.ComponentMap.ContainsKey(Content.Type) && ElementRegistry.ComponentMap[Content.Type].ConfigComponent != null)

@@ -1,4 +1,6 @@
 @using AzureApplicationAccelerator.Elements.Common
+@inject IJSRuntime JSRuntime
+@inject IMessageService MessageService
 
 <FluentAccordionItem Heading="Constraints">
     <FluentIcon Value="@(new Icons.Regular.Size20.LockClosedRibbon())" Slot="start" Color="@Color.Neutral" />
@@ -12,8 +14,8 @@
     </PropertyDescription>
     @if (Element?.Constraints?.AllowedValues != null && Element.Constraints.AllowedValues.Any())
     {
-        <FluentDataGrid Items="Element.Constraints.AllowedValues.AsQueryable()" GridTemplateColumns="2fr 2fr 3fr 1fr" TGridItem="OptionItem" Class="mb-2">
-            <TemplateColumn Title="Display Label" Context="option" Style="height: auto;">
+        <FluentDataGrid @ref="dataGrid" Items="Element.Constraints.AllowedValues.AsQueryable()" GridTemplateColumns="2fr 2fr 3fr 1fr 1fr" TGridItem="OptionItem" Class="mb-2">
+            <TemplateColumn Title="Display" Context="option" Style="height: auto;">
                 <FluentTextField @bind-Value="option.Label"
                                  Id="@($"display-{Element.GetHashCode()}")"
                                  Placeholder="e.g., Value one"
@@ -41,14 +43,14 @@
                 </FluentTooltip>
 
             </TemplateColumn>
-            <SelectColumn TGridItem="OptionItem" Title="Is default"
+            <SelectColumn TGridItem="OptionItem"
+                          Title="Default"
                           SelectMode="DataGridSelectMode.Single"
                           SelectFromEntireRow="false"
                           OnSelect="@((e) => SetDefaultValue(e.Item))"
                           Style="height: auto;"
                           Property="IsDefault"
-                          Context="option"
-                          />
+                          Context="option" />
             <TemplateColumn Title="Actions" Align="Align.End" Context="option" Style="height: auto;">
                 <FluentButton Appearance="Appearance.Lightweight"
                               IconStart="@(new Icons.Regular.Size24.Delete())"
@@ -67,10 +69,32 @@
                   Style="margin: 8px;">
         Add Allowed Value
     </FluentButton>
+
+    <FluentMessageBarProvider Section="MESSAGES_OPTIONGROUP" />
+
 </FluentAccordionItem>
+
+<script>
+    function updateColumnTitles() {
+        const selectDefaultHeader = document.querySelector('th.column-header.select-all');
+        if (selectDefaultHeader) {
+            selectDefaultHeader.innerHTML = '<div style=\""display: flex; justify-content: flex-start;\"" b-pxhtqoo8qd=\""><div class=\""col-title\"" style=\""width: calc(100% - 10px);\"" ><div class=\""col-title-text\"" >Default</div></div></div>';
+        }
+    }
+</script>
 
 @code {
     [Parameter] public OptionsGroupElement Element { get; set; } = default!;
+    private FluentDataGrid<OptionItem>? dataGrid;
+    private IJSObjectReference? _module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && Element?.Constraints?.AllowedValues != null && Element.Constraints.AllowedValues.Any())
+        {
+            await JSRuntime.InvokeVoidAsync("updateColumnTitles");
+        }
+    }
 
     private bool IsDefault(OptionItem item)
     {
@@ -109,9 +133,17 @@
 
     private void RemoveOption(OptionItem option)
     {
-        if (Element.Constraints.AllowedValues != null)
+        if (Element.Constraints.AllowedValues == null)
         {
-            Element.Constraints.AllowedValues.Remove(option);
+            return;
         }
+
+        if (Element.Constraints.AllowedValues.Count <= 1)
+        {
+            MessageService.ShowMessageBarAsync("At least one allowed value is required. You cannot remove the last option.", MessageIntent.Error, "MESSAGES_OPTIONGROUP");
+            return;
+        }
+
+        Element.Constraints.AllowedValues.Remove(option);
     }
 }
