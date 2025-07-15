@@ -1,5 +1,4 @@
-﻿using AzureApplicationAccelerator.Elements.Common;
-using Microsoft.FluentUI.AspNetCore.Components;
+﻿using Microsoft.FluentUI.AspNetCore.Components;
 using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons;
 
 namespace AzureApplicationAccelerator.Shared.Constants

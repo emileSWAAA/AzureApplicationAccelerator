@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Elements.Common
+namespace AzureApplicationAccelerator.Elements.Entities.Common
 {
     public class OptionsGroupElement : UIElement
     {

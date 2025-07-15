@@ -1,4 +1,4 @@
-﻿namespace AzureApplicationAccelerator.Elements.Common
+﻿namespace AzureApplicationAccelerator.Elements.Entities.Common
 {
     public class CheckBoxElement : UIElement
     {

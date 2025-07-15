@@ -1,4 +1,10 @@
-﻿using AzureApplicationAccelerator.Elements.Common;
+﻿using AzureApplicationAccelerator.Elements.Entities.Common;
+using AzureApplicationAccelerator.Elements.Entities.Compute;
+using AzureApplicationAccelerator.Elements.Entities.KeyVault;
+using AzureApplicationAccelerator.Elements.Entities.ManagedIdentity;
+using AzureApplicationAccelerator.Elements.Entities.Network;
+using AzureApplicationAccelerator.Elements.Entities.Solutions;
+using AzureApplicationAccelerator.Elements.Entities.Storage;
 using static AzureApplicationAccelerator.Elements.AzureResourceUIConstants.CreateUiDefinition;
 
 namespace AzureApplicationAccelerator.Elements
@@ -22,9 +28,29 @@ namespace AzureApplicationAccelerator.Elements
         {
             { Elements.CheckBox.Type, typeof(CheckBoxElement) },
             { Elements.DropDown.Type, typeof(DropDownElement) },
+            { Elements.EditableGrid.Type, typeof(EditableGridElement) },
             { Elements.FileUpload.Type, typeof(FileUploadElement) },
             { Elements.InfoBox.Type, typeof(InfoBoxElement) },
-            { Elements.OptionsGroup.Type, typeof(OptionsGroupElement) }
+            { Elements.OptionsGroup.Type, typeof(OptionsGroupElement) },
+            { Elements.PasswordBox.Type, typeof(PasswordBoxElement) },
+            { Elements.Section.Type, typeof(SectionElement) },
+            { Elements.ServicePrincipalSelector.Type, typeof(ServicePrincipalSelectorElement) },
+            { Elements.Slider.Type, typeof(SliderElement) },
+            { Elements.TagsByResource.Type, typeof(TagsByResourceElement) },
+            { Elements.TextBlock.Type, typeof(TextBlockElement) },
+            { Elements.TextBox.Type, typeof(TextBoxElement) },
+            { Elements.CredentialsCombo.Type, typeof(CredentialsComboElement) },
+            { Elements.SizeSelector.Type, typeof(SizeSelectorElement) },
+            { Elements.UserNameTextBox.Type, typeof(UserNameTextBoxElement) },
+            { Elements.KeyVaultCertificateSelector.Type, typeof(KeyVaultCertificateSelectorElement) },
+            { Elements.IdentitySelector.Type, typeof(IdentitySelectorElement) },
+            { Elements.PublicIpAddressCombo.Type, typeof(PublicIpAddressComboElement) },
+            { Elements.VirtualNetworkCombo.Type, typeof(VirtualNetworkComboElement) },
+            { Elements.ArmApiControl.Type, typeof(ArmApiControlElement) },
+            { Elements.ResourceSelector.Type, typeof(ResourceSelectorElement) },
+            { Elements.MultiStorageAccountCombo.Type, typeof(MultiStorageAccountComboElement) },
+            { Elements.StorageAccountSelector.Type, typeof(StorageAccountSelectorElement) },
+            { Elements.StorageBlobSelector.Type, typeof(StorageBlobSelectorElement) }
         };
 
         public static readonly Dictionary<string, string> ElementTypeInfoLinks = new Dictionary<string, string>

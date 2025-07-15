@@ -15,7 +15,7 @@ namespace AzureApplicationAccelerator.Elements
         public required string Type { get; set; }
 
         [JsonPropertyOrder(3)]
-        [JsonPropertyName("description")]
+        [JsonPropertyName("visible")]
         public bool? Visible { get; set; }
 
         [JsonPropertyOrder(4)]
