@@ -12,6 +12,7 @@ Creating Azure Marketplace Applications often involves dealing with the complex 
 
 You can already use the application through this live website.
 Please be aware, this project is under construction and thus bugs and changes are due to be made frequently.
+
 [Demo](https://amp-accelerator-hmhch0fuejbydpdb.swedencentral-01.azurewebsites.net/)
 
 ## Table of Contents
