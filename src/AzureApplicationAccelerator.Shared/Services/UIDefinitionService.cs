@@ -38,6 +38,7 @@ namespace AzureApplicationAccelerator.Shared.Services
         {
             Definition = new CreateUIDefinition();
             await _js.SetItemAsync(StorageKey, Definition);
+            await PersistAsync();
             NotifyChanged();
         }
 
