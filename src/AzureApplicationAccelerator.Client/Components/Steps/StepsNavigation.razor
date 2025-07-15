@@ -105,12 +105,13 @@
 
     private async Task HandleDialogResultAsync(DialogResult result, string stepName, StepDialogParameters stepDialogParameters)
     {
-        if (result?.Data is not StepDialogParameters dialogData ||
-            result.Cancelled)
+        if (result?.Data is not StepDialogParameters dialogData)
         {
-            ToastService.ShowError("Dialog was cancelled or returned no data.");
+            ToastService.ShowError("Dialog returned no data.");
             return;
         }
+
+        if (result.Cancelled) { return; }
 
         try
         {
