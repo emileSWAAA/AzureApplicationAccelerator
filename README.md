@@ -52,7 +52,7 @@ This project provides a builder for `CreateUIDefinition.json` files leveraging A
 | Microsoft.Common.FileUpload                    |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-fileupload)                    |
 | Microsoft.Common.InfoBox                       |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-infobox)                       |
 | Microsoft.Common.OptionsGroup                  |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-optionsgroup)                  |
-| Microsoft.Common.PasswordBox                   |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-passwordbox)                   |
+| Microsoft.Common.PasswordBox                   |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-passwordbox)                   |
 | Microsoft.Common.Section                       |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-section)                       |
 | Microsoft.Common.ServicePrincipalSelector      |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-serviceprincipalselector)      |
 | Microsoft.Common.Slider                        |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-slider)                        |
