@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AzureApplicationAccelerator.Elements.Interfaces;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Entities.Common

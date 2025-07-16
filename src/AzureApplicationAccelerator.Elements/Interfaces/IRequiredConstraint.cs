@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AzureApplicationAccelerator.Elements
+namespace AzureApplicationAccelerator.Elements.Interfaces
 {
     public interface IRequiredConstraint
     {

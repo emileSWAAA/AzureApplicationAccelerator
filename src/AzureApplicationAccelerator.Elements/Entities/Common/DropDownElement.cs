@@ -1,4 +1,6 @@
-﻿namespace AzureApplicationAccelerator.Elements.Entities.Common
+﻿using AzureApplicationAccelerator.Elements.Interfaces;
+
+namespace AzureApplicationAccelerator.Elements.Entities.Common
 {
     public class DropDownElement : UIElement
     {

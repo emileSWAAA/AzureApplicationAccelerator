@@ -55,7 +55,7 @@
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-            Converters = { new UIElementJsonConverter(), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+            Converters = { new UIElementJsonConverter(), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase), new PasswordBoxConverter() }
         });
 
         standaloneCodeEditor?.SetValue(DefinitionJson);

@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using AzureApplicationAccelerator.Elements.Interfaces;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Entities.Common

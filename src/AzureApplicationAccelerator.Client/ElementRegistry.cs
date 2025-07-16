@@ -33,6 +33,7 @@ namespace AzureApplicationAccelerator.Client
             [AzureResourceUIConstants.Elements.StorageAccountSelector.Type] = new(typeof(StorageAccountSelector), typeof(StorageAccountSelectorEditor)),
             [AzureResourceUIConstants.Elements.StorageBlobSelector.Type] = new(typeof(StorageBlobSelector), typeof(StorageBlobSelectorEditor)),
         };
+
     }
 
     public record ElementComponentMapping(Type EditorComponent, Type ConfigComponent) { }
