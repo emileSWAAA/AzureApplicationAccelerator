@@ -2,7 +2,29 @@
 @using AzureApplicationAccelerator.Elements.Converters
 @using System.Text.Json.Serialization
 @inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
+@inject IJSRuntime JSRuntime
 
+
+<div class="manifest-buttons">
+    <FluentButton Id="copyBtn"
+                  IconEnd="@(new Icons.Regular.Size20.DocumentCopy())"
+                  Title="Copy"
+                  Appearance="Appearance.Accent"
+                  OnClick="CopyToClipboard" />
+    <FluentTooltip Position="TooltipPosition.Top" Anchor="copyBtn">
+       Copy to clipboard
+    </FluentTooltip>
+
+    <FluentButton Id="downloadBtn"
+                  IconEnd="@(new Icons.Regular.Size20.ArrowDownload())"
+                  Title="Download"
+                  Appearance="Appearance.Accent"
+                  OnClick="DownloadJson" />
+    <FluentTooltip Position="TooltipPosition.Top" Anchor="downloadBtn">
+        Download as file
+    </FluentTooltip>
+</div>
 <StandaloneCodeEditor Id="defintion-manifest"
                       ConstructionOptions="EditorConstructionOptions"
                       CssClass="manifest-editor"
@@ -12,7 +34,35 @@
     .manifest-editor {
         height: 100%;
     }
+
+    .manifest-buttons {
+        padding-bottom: 25px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
 </style>
+
+<script>
+    window.downloadFile = (filename, content) => {
+        const blob = new Blob([content], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        URL.revokeObjectURL(url);
+    };
+
+    window.copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text).then(
+            () => console.log("Copied to clipboard"),
+            err => console.error("Failed to copy: ", err)
+        );
+    };
+</script>
 
 @code {
     private StandaloneCodeEditor standaloneCodeEditor = new StandaloneCodeEditor();
@@ -64,6 +114,18 @@
         });
 
         standaloneCodeEditor?.SetValue(DefinitionJson);
+    }
+
+    private async Task CopyToClipboard()
+    {
+        await JSRuntime.InvokeVoidAsync("copyToClipboard", DefinitionJson);
+        ToastService.ShowSuccess("Copied to clipboard");
+    }
+
+    private async Task DownloadJson()
+    {
+        await JSRuntime.InvokeVoidAsync("downloadFile", "createUIDefinition.json", DefinitionJson);
+        ToastService.ShowDownload("Downloading createUIDefinition.json");
     }
 
     public void Dispose()
