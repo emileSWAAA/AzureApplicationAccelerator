@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace AzureApplicationAccelerator.Elements.Converters
@@ -36,18 +37,30 @@ namespace AzureApplicationAccelerator.Elements.Converters
 
             foreach (var prop in properties)
             {
-                var propValue = prop.GetValue(value);
-                if (!ShouldSerializeValue(propValue, prop.PropertyType))
+                if (prop.GetIndexParameters().Length > 0)
                 {
                     continue;
                 }
 
-                var jsonPropertyName = prop.GetCustomAttributes(typeof(JsonPropertyNameAttribute), inherit: false)
-                    .FirstOrDefault() as JsonPropertyNameAttribute;
-                var propertyName = jsonPropertyName?.Name ?? prop.Name;
+                try
+                {
+                    var propValue = prop.GetValue(value);
+                    if (!ShouldSerializeValue(propValue, prop.PropertyType))
+                    {
+                        continue;
+                    }
 
-                writer.WritePropertyName(propertyName);
-                JsonSerializer.Serialize(writer, propValue, prop.PropertyType, options);
+                    var jsonPropertyName = prop.GetCustomAttributes(typeof(JsonPropertyNameAttribute), inherit: false)
+                        .FirstOrDefault() as JsonPropertyNameAttribute;
+                    var propertyName = jsonPropertyName?.Name ?? prop.Name;
+
+                    writer.WritePropertyName(propertyName);
+                    JsonSerializer.Serialize(writer, propValue, prop.PropertyType, options);
+                }
+                catch (TargetParameterCountException)
+                {
+                    continue;
+                }
             }
 
             writer.WriteEndObject();
@@ -76,10 +89,26 @@ namespace AzureApplicationAccelerator.Elements.Converters
                 var nestedProperties = propertyType.GetProperties();
                 foreach (var nestedProp in nestedProperties)
                 {
-                    var nestedValue = nestedProp.GetValue(value);
-                    if (ShouldSerializeValue(nestedValue, nestedProp.PropertyType))
+                    if (nestedProp.GetIndexParameters().Length > 0 || !nestedProp.CanRead)
                     {
-                        return true;
+                        continue;
+                    }
+
+                    try
+                    {
+                        var nestedValue = nestedProp.GetValue(value);
+                        if (ShouldSerializeValue(nestedValue, nestedProp.PropertyType))
+                        {
+                            return true;
+                        }
+                    }
+                    catch (TargetParameterCountException)
+                    {
+                        continue;
+                    }
+                    catch (TargetInvocationException)
+                    {
+                        continue;
                     }
                 }
 
