@@ -58,7 +58,7 @@ This project provides a builder for `CreateUIDefinition.json` files leveraging A
 | Microsoft.Common.Slider                        |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-slider)                        |
 | Microsoft.Common.TagsByResource                |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-tagsbyresource)                |
 | Microsoft.Common.TextBlock                     |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-textblock)                     |
-| Microsoft.Common.TextBox                       |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-textbox)                       |
+| Microsoft.Common.TextBox                       |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-textbox)                       |
 | Microsoft.Compute.CredentialsCombo             |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-credentialscombo)             |
 | Microsoft.Compute.SizeSelector                 |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-sizeselector)                 |
 | Microsoft.Compute.UserNameTextBox              |      ❌     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-compute-usernametextbox)              |
