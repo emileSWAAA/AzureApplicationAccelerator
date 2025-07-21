@@ -1,7 +1,145 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentAccordionItem Heading="Options">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentTextField @bind-Value="Element.DefaultValue" Placeholder="Default text" style="width: 100%;" Label="Default Value" />
+    <PropertyDescription>The default value that appears in the text box when first displayed.</PropertyDescription>
+
+    <FluentTextField @bind-Value="Element.Placeholder" Placeholder="Enter placeholder text" style="width: 100%;" Label="Placeholder" />
+    <PropertyDescription>Help text that disappears when the user begins editing. If both placeholder and defaultValue are defined, defaultValue takes precedence.</PropertyDescription>
+
+    <FluentCheckbox ThreeState="true"
+                    @bind-CheckState="Element.MultiLine"
+                    Label="Multi-line" />
+    <PropertyDescription>Enable multi-line text input. When true, the text box accepts multiple lines with support for line breaks (\r\n).</PropertyDescription>
+
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Constraints">
+    <FluentIcon Value="@(new Icons.Regular.Size20.LockClosedRibbon())" Slot="start" Color="@Color.Neutral" />
+
+    <RequiredConstraint @bind-Required="@Element.Constraints.Required" />
+
+    <FluentStack Orientation="Orientation.Vertical">
+        <FluentButton @onclick="@(() => AddValidation(ValidationType.Regex))" Appearance="Appearance.Accent" Style="margin-bottom: 10px;" IconStart="@(new Icons.Regular.Size20.Add())">
+            Add Validation: Regex
+        </FluentButton>
+
+        <FluentButton @onclick="@(() => AddValidation(ValidationType.IsValid))" Appearance="Appearance.Accent" Style="margin-bottom: 10px;" IconStart="@(new Icons.Regular.Size20.Add())">
+            Add Validation: Expression (isValid)
+        </FluentButton>
+    </FluentStack>
+
+    @if (Element.Constraints?.Validations != null)
+    {
+        @foreach (var validation in Element.Constraints.Validations.ToList())
+        {
+            <FluentCard Style="margin-bottom: 10px;">
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Stretch" Style="width: 100%;">
+                    @if (validation is TextBoxConstraintRegexValidation)
+                    {
+                        <FluentLabel Weight="FontWeight.Bold">Regex Validation</FluentLabel>
+                    }
+                    else if (validation is TextBoxConstraintIsValidValidation)
+                    {
+                        <FluentLabel Weight="FontWeight.Bold">IsValid Validation</FluentLabel>
+                    }
+                    else
+                    {
+                        <FluentLabel Weight="FontWeight.Bold">Unknown Validation</FluentLabel>
+                    }
+
+                    <div style="flex: 1;"></div>
+
+                    <FluentButton @onclick="() => RemoveValidation(validation)" Appearance="Appearance.Stealth">
+                        <FluentIcon Value="@(new Icons.Regular.Size20.Delete())" />
+                    </FluentButton>
+                </FluentStack>
+
+                @if (validation is TextBoxConstraintRegexValidation regexConstraint)
+                {
+                    <FluentTextField @bind-Value="regexConstraint.Regex"
+                                     Placeholder="Enter regex pattern"
+                                     style="width: 100%; margin-top: 5px;"
+                                     Label="Pattern" />
+                    <FluentTextField @bind-Value="regexConstraint.Message"
+                                     Placeholder="Validation error message (optional)"
+                                     style="width: 100%; margin-top: 5px;"
+                                     Label="Message" />
+                    <PropertyDescription>
+                        The regex property is a JavaScript regular expression pattern. If specified, the text box's value must match the pattern to validate successfully. The default value is null. For more information about regex syntax, see <a href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference" target="_blank">Regular expression quick reference.</a>
+                    </PropertyDescription>
+                }
+                else if (validation is TextBoxConstraintIsValidValidation isValidConstraint)
+                {
+                    <FluentTextField @bind-Value="isValidConstraint.IsValid"
+                                     Placeholder="Enter validation expression"
+                                     style="width: 100%; margin-top: 5px;"
+                                     Label="Expression" />
+                    <FluentTextField @bind-Value="isValidConstraint.Message"
+                                     Placeholder="Validation error message (optional)"
+                                     style="width: 100%; margin-top: 5px;"
+                                     Label="Message" />
+                    <PropertyDescription>
+                        The isValid property contains an expression that evaluates to true or false. Within the expression, you define the condition that determines whether the text box is valid.
+                        The message property is a string to display when the text box's value fails validation.
+                    </PropertyDescription>
+                }
+            </FluentCard>
+        }
+    }
+
+</FluentAccordionItem>
+
 
 @code {
     [Parameter] public TextBoxElement Element { get; set; } = default!;
+
+    private void AddValidation(ValidationType validationType)
+    {
+        Element.Constraints.Validations ??= new List<TextBoxConstraintValidation>();
+        TextBoxConstraintValidation? textBoxValidation = null;
+        switch (validationType)
+        {
+            case ValidationType.Regex:
+                if (Element.Constraints.Validations.Any(v => v is TextBoxConstraintRegexValidation))
+                {
+                    return;
+                }
+                textBoxValidation = new TextBoxConstraintRegexValidation();
+                break;
+            case ValidationType.IsValid:
+                if (Element.Constraints.Validations.Any(v => v is TextBoxConstraintIsValidValidation))
+                {
+                    return;
+                }
+                textBoxValidation = new TextBoxConstraintIsValidValidation();
+                break;
+        }
+
+        if (textBoxValidation == null)
+        {
+            return;
+        }
+
+        Element.Constraints?.Validations.Add(textBoxValidation);
+    }
+
+    private void RemoveValidation(TextBoxConstraintValidation validation)
+    {
+        if (validation == null ||
+            Element.Constraints?.Validations == null ||
+            Element.Constraints.Validations.Count() == 0)
+        {
+            return;
+        }
+        Element.Constraints?.Validations.Remove(validation);
+    }
+
+    private enum ValidationType
+    {
+        Regex,
+        IsValid
+    }
 }

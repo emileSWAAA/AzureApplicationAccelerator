@@ -1,7 +1,37 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentStack>
+    @if (Element.MultiLine == null || Element.MultiLine == false)
+    {
+        <FluentTextField Label="@Element.Label"
+                         Name="@Element.Name"
+                         Placeholder="@GetPlaceholder()"
+                         Style="width: 100%;" />
+    }
+    else
+    {
+        <FluentTextArea Label="@Element.Label"
+                        Name="@Element.Name"
+                        Placeholder="@GetPlaceholder()" />
+    }
+
+</FluentStack>
 
 @code {
     [Parameter] public TextBoxElement Element { get; set; } = default!;
+
+    private string GetPlaceholder()
+    {
+        if (Element.DefaultValue != null)
+        {
+            return Element.DefaultValue;
+        }
+
+        if (Element.Placeholder != null)
+        {
+            return Element.Placeholder;
+        }
+
+        return string.Empty;
+    }
 }
