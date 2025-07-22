@@ -1,6 +1,44 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentAccordionItem Heading="Settings">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Settings())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentNumberField @bind-Value="Element.Min" Label="Minimum Value" style="width: 100%;" />
+    <PropertyDescription>The minimum value for the slider.</PropertyDescription>
+
+    <FluentNumberField @bind-Value="Element.Max" Label="Maximum Value" style="width: 100%;" />
+    <PropertyDescription>The maximum value for the slider.</PropertyDescription>
+
+    <FluentNumberField @bind-Value="Element.DefaultValue" Label="Default Value" style="width: 100%;" />
+    <PropertyDescription>The initial value of the slider. Must be between min and max.</PropertyDescription>
+
+    <FluentTextField @bind-Value="Element.SubLabel" Placeholder="e.g., MB, GB, %" style="width: 100%;" Label="Sub Label" />
+    <PropertyDescription>The unit or suffix to display after values (e.g., MB for memory).</PropertyDescription>
+
+    <FluentCheckbox Label="Show Step Markers"
+                    ThreeState="true"
+                    CheckState="@Element.ShowStepMarkers" />
+    <PropertyDescription>The showStepMarkers property defaults to true. The step markers are only shown when the range from min to max is 100 or less.</PropertyDescription>
+
+
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Constraints">
+    <FluentIcon Value="@(new Icons.Regular.Size20.ShieldCheckmark())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentCheckbox Label="Required"
+                    ThreeState="true"
+                    CheckState="@Element.Constraints?.Required" />
+    <PropertyDescription>
+        Indicates whether the element is required, or not required, or indeterminate. If true, the element must be filled out before the form can be submitted. The default value is true.
+        @if (!Element.Constraints?.Required == null)
+        {
+            <p>Value is null (indeterminate) and will not be rendered in the output unless explicitly handled.</p>
+        }
+    </PropertyDescription>
+
+
+</FluentAccordionItem>
 
 @code {
     [Parameter] public SliderElement Element { get; set; } = default!;

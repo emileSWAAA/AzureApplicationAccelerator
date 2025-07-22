@@ -1,7 +1,49 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentStack Orientation="Orientation.Horizontal">
+    <FluentSlider Min="@Element.Min" Max="@Element.Max" Value="@sliderValue"
+                  ValueChanged="@((int value) => OnSliderValueChanged(value))" Step="1">
+        @if (Element.ShowStepMarkers == null || Element.ShowStepMarkers == true)
+        {
+            @for (int i = 0; i <= 10; i++)
+            {
+                var position = Element.Min + (int)((Element.Max - Element.Min) * i / 10.0);
+                <FluentSliderLabel Position="@position" HideMark="true">|</FluentSliderLabel>
+            }
+        }
+    </FluentSlider>
+    <FluentStack Orientation="Orientation.Vertical" Width="15%">
+        <FluentNumberField @bind-Value="@sliderValue" />
+        <FluentLabel>@Element.SubLabel</FluentLabel>
+    </FluentStack>
+</FluentStack>
 
 @code {
     [Parameter] public SliderElement Element { get; set; } = default!;
+
+    private int sliderValue { get; set; }
+    private bool isUpdating = false;
+
+    protected override Task OnInitializedAsync()
+    {
+        Element.SubLabel = "mb";
+        Element.Max = 500;
+        Element.ShowStepMarkers = true;
+        sliderValue = Element.DefaultValue ?? (Element.Max / 2);
+        return base.OnInitializedAsync();
+    }
+
+    private async Task OnSliderValueChanged(int value)
+    {
+        if (!isUpdating)
+        {
+            isUpdating = true;
+            // Add some delay otherwise the UI will concurrently update and bug out...
+            // Very ugly, please help me fix this!
+            await Task.Delay(50);
+            sliderValue = value;
+            StateHasChanged();
+            isUpdating = false;
+        }
+    }
 }
