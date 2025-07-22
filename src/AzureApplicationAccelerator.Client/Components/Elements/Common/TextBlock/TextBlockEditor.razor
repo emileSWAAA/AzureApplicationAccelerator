@@ -1,6 +1,22 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentAccordionItem Heading="Options">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Options())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentTextField @bind-Value="Element.Options.Text" Placeholder="Information text to display" style="width: 100%;" Label="Text" />
+    <PropertyDescription>The text to display in the text block.</PropertyDescription>
+
+    <FluentDivider Style="width: 100%; margin: 20px 0;" />
+
+    <FluentLabel Typo="Typography.Body" Style="margin-bottom: 10px;">Link Options</FluentLabel>
+
+    <FluentTextField @bind-Value="Element.Options.Link.Label" Placeholder="Learn more" style="width: 100%;" Label="Link Label" />
+    <PropertyDescription>The label for the link. If both label and URI are provided, a link will be displayed.</PropertyDescription>
+
+    <FluentTextField @bind-Value="Element.Options.Link.Uri" Placeholder="https://example.com" style="width: 100%;" Label="Link URI" />
+    <PropertyDescription>The URI to link to. Must be a valid URL starting with http:// or https://.</PropertyDescription>
+
+</FluentAccordionItem>
 
 @code {
     [Parameter] public TextBlockElement Element { get; set; } = default!;

@@ -21,7 +21,7 @@ namespace AzureApplicationAccelerator.Elements
 
         [JsonPropertyOrder(4)]
         [JsonPropertyName("label")]
-        public string? Label { get; set; }
+        public virtual string? Label { get; set; }
 
         [JsonPropertyOrder(5)]
         [JsonPropertyName("toolTip")]

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.10807.200 main
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator", "src\AzureApplicationAccelerator\AzureApplicationAccelerator.csproj", "{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Shared", "src\AzureApplicationAccelerator.Shared\AzureApplicationAccelerator.Shared.csproj", "{07671CC7-FC7D-4C18-9E42-66F0E1D059B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Elements", "src\AzureApplicationAccelerator.Elements\AzureApplicationAccelerator.Elements.csproj", "{C8F8B1AF-87FC-483A-B75D-4AFABC207830}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

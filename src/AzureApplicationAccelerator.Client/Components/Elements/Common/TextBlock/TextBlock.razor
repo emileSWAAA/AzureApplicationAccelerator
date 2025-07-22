@@ -1,6 +1,18 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+    @if (!string.IsNullOrEmpty(Element?.Options?.Text))
+    {
+        <FluentLabel>@Element.Options.Text</FluentLabel>
+    }
+    @if (!string.IsNullOrWhiteSpace(Element?.Options?.Link?.Uri) && !string.IsNullOrWhiteSpace(Element?.Options?.Link?.Label))
+    {
+        <FluentAnchor Href="@Element.Options.Link.Uri" Target="_blank">
+            @Element.Options.Link.Label
+            <FluentIcon Value="@(new Icons.Regular.Size12.Open())" />
+        </FluentAnchor>
+    }
+</FluentStack>
 
 @code {
     [Parameter] public TextBlockElement Element { get; set; } = default!;
