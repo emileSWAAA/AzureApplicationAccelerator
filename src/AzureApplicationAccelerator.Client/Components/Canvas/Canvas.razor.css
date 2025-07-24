@@ -33,7 +33,6 @@
         align-items: flex-start;
         justify-content: space-between;
         background: #ffffff; /* TODO: Use design  tokens */
-        border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         border: 1px solid #e0e0e0; /* TODO: Use design  tokens */
         padding: 16px;

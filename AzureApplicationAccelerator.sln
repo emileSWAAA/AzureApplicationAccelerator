@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator", "src\AzureApplicationAccelerator\AzureApplicationAccelerator.csproj", "{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E}"
 EndProject
@@ -16,6 +16,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{02EA68
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2D20D55-5033-496F-9EF0-0E8A1B1C54A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A8868949-2B90-45AB-9780-FE0B84949DF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureApplicationAccelerator.Shared.Tests", "tests\AzureApplicationAccelerator.Shared.Tests\AzureApplicationAccelerator.Shared.Tests.csproj", "{BA6E9CE6-D190-4F71-99E7-1C393CE92405}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +45,20 @@ Global
 		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8F8B1AF-87FC-483A-B75D-4AFABC207830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6E9CE6-D190-4F71-99E7-1C393CE92405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6E9CE6-D190-4F71-99E7-1C393CE92405}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6E9CE6-D190-4F71-99E7-1C393CE92405}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6E9CE6-D190-4F71-99E7-1C393CE92405}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FC8DFB47-3A93-7036-78F8-4C07DA2F1B5E} = {E2D20D55-5033-496F-9EF0-0E8A1B1C54A4}
+		{27D73755-0366-43F5-A5CD-F9E1E9C3D113} = {E2D20D55-5033-496F-9EF0-0E8A1B1C54A4}
+		{07671CC7-FC7D-4C18-9E42-66F0E1D059B2} = {E2D20D55-5033-496F-9EF0-0E8A1B1C54A4}
+		{C8F8B1AF-87FC-483A-B75D-4AFABC207830} = {E2D20D55-5033-496F-9EF0-0E8A1B1C54A4}
+		{BA6E9CE6-D190-4F71-99E7-1C393CE92405} = {A8868949-2B90-45AB-9780-FE0B84949DF8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {21989A55-56BE-4BC6-99B1-2DF8088E983A}

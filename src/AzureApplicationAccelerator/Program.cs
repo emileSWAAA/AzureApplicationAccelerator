@@ -1,5 +1,5 @@
 using AzureApplicationAccelerator.Components;
-using AzureApplicationAccelerator.Shared.Services;
+using AzureApplicationAccelerator.Shared.Extensions;
 using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +13,8 @@ builder.Services.AddFluentUIComponents(options =>
 {
     options.ValidateClassNames = false;
 });
-
+builder.Services.AddAzureApplicationAcceleratorServices();
 builder.Services.AddApplicationInsightsTelemetry();
-
-builder.Services.AddScoped<UIDefinitionService>();
 
 var app = builder.Build();
 

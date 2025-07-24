@@ -21,6 +21,7 @@
 
 @code {
     [Parameter] public UIElement Element { get; set; } = default!;
+    [Parameter] public EventCallback OnRemove { get; set; }
 
     private Type _editorComponent;
 
@@ -82,8 +83,15 @@
                 return;
             }
 
-            await DefinitionService.RemoveElementAsync(Element);
-            ToastService.ShowSuccess("Element removed");
+            if (OnRemove.HasDelegate)
+            {
+                await OnRemove.InvokeAsync();
+            }
+            else
+            {
+                await DefinitionService.RemoveElementAsync(Element);
+                ToastService.ShowSuccess("Element removed");
+            }
         }
         catch (Exception ex)
         {

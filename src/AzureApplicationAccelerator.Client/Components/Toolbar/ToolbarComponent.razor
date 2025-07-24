@@ -1,5 +1,6 @@
 ﻿@using AzureApplicationAccelerator.Shared.Constants
 @inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
 
 <div>
     <FluentNavMenu @bind-Expanded="@expanded" Title="Custom navigation menu">
@@ -36,16 +37,23 @@
 
     private async Task ListOneRemove(FluentSortableListEventArgs args)
     {
-        if (args is null ||
-            args.FromListId == args.ToListId ||
-            args.ToListId == args.FromListId)
+        try
         {
-            return;
+            if (args is null ||
+                args.FromListId == args.ToListId ||
+                args.ToListId == args.FromListId)
+            {
+                return;
+            }
+
+            var group = args.FromListId.Substring(8);
+            var toolbarItem = ToolbarProvider.Groups.FirstOrDefault(g => g.Name == group)?.Items[args.OldIndex];
+
+            await DefinitionService.AddElementAsync(toolbarItem, args.NewIndex, args.ToListId);
         }
-
-        var group = args.FromListId.Substring(8);
-        var toolbarItem = ToolbarProvider.Groups.FirstOrDefault(g => g.Name == group)?.Items[args.OldIndex];
-
-        await DefinitionService.AddElementAsync(toolbarItem, args.NewIndex, args.ToListId);
+        catch (InvalidOperationException ioEx)
+        {
+            ToastService.ShowError(ioEx.Message);
+        }
     }
 }

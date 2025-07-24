@@ -1,4 +1,5 @@
 ﻿@inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
 
 <div class="sortable-container">
     @if (!DefinitionService.ActiveStep?.Elements?.Any() ?? true)
@@ -33,7 +34,13 @@
         var newIndex = args.NewIndex;
         var oldElement = DefinitionService.ActiveStep.Elements[oldIndex];
         var newElement = DefinitionService.ActiveStep.Elements[newIndex];
-
-        await DefinitionService.InsertAtAsync(oldElement, newIndex);
+        try
+        {
+            await DefinitionService.InsertAtAsync(oldElement, newIndex);
+        }
+        catch (InvalidOperationException ioEx)
+        {
+            ToastService.ShowError(ioEx.Message);
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace AzureApplicationAccelerator.Shared.Models
         public required Icon Icon { get; set; }
         public required string Type { get; set; }
 
-        public UIElement ToUiElement()
+        public virtual UIElement ToUiElement()
         {
             ArgumentNullException.ThrowIfNull(this, nameof(ToolbarItem));
             if (!AzureResourceUIConstants.TypeMapping.TryGetValue(Type, out var elementType))

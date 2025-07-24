@@ -1,6 +1,9 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
+@inject UIDefinitionService DefinitionService
+@inject IToastService ToastService
 
 <FluentStack>
+    <FluentLabel>@Element.Label</FluentLabel>
     <div class="sortable-container">
         @if (!Element?.Elements?.Any() ?? true)
         {
@@ -13,7 +16,7 @@
                             Handle="true"
                             Class="canvas-container section-container">
             <ItemTemplate>
-                <CanvasItem Element="@context" @key="@context.GetHashCode()" />
+                <CanvasItem Element="@context" @key="@context.GetHashCode()"  />
             </ItemTemplate>
         </FluentSortableList>
     </div>
@@ -65,4 +68,10 @@
 
 @code {
     [Parameter] public SectionElement Element { get; set; } = default!;
+
+    protected override Task OnInitializedAsync()
+    {
+        DefinitionService.OnChange += StateHasChanged;
+        return base.OnInitializedAsync();
+    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 
 namespace AzureApplicationAccelerator.Elements.Converters
 {
@@ -46,16 +45,8 @@ namespace AzureApplicationAccelerator.Elements.Converters
         {
             writer.WriteStartObject();
 
-            var actualType = value.GetType();
-            var properties = actualType.GetProperties();
-
-            foreach (var prop in properties)
+            foreach (var prop in GetOrderedSerializableProperties(value.GetType()))
             {
-                if (prop.GetIndexParameters().Length > 0)
-                {
-                    continue;
-                }
-
                 try
                 {
                     var propValue = prop.GetValue(value);
@@ -64,15 +55,7 @@ namespace AzureApplicationAccelerator.Elements.Converters
                         continue;
                     }
 
-                    var jsonPropertyName = prop.GetCustomAttributes(typeof(JsonPropertyNameAttribute), inherit: false)
-                        .FirstOrDefault() as JsonPropertyNameAttribute;
-                    var propertyName = jsonPropertyName?.Name ?? prop.Name;
-
-                    // Apply the naming policy from options if no explicit JsonPropertyName is specified
-                    if (jsonPropertyName == null && options.PropertyNamingPolicy != null)
-                    {
-                        propertyName = options.PropertyNamingPolicy.ConvertName(propertyName);
-                    }
+                    var propertyName = GetJsonPropertyName(prop, options);
 
                     writer.WritePropertyName(propertyName);
                     JsonSerializer.Serialize(writer, propValue, prop.PropertyType, options);
@@ -84,6 +67,42 @@ namespace AzureApplicationAccelerator.Elements.Converters
             }
 
             writer.WriteEndObject();
+        }
+
+        private static List<PropertyInfo> GetOrderedSerializableProperties(Type type)
+        {
+            return type.GetProperties()
+                .Where(p => p.GetIndexParameters().Length == 0)
+                .Select(p => new {
+                    Property = p,
+                    Order = GetJsonPropertyOrder(p),
+                    Name = p.Name
+                })
+                .OrderBy(x => x.Order)
+                .ThenBy(x => x.Name)
+                .Select(x => x.Property)
+                .ToList();
+        }
+
+        private static int GetJsonPropertyOrder(PropertyInfo prop)
+        {
+            return prop.GetCustomAttributes(typeof(JsonPropertyOrderAttribute), inherit: true)
+                .Cast<JsonPropertyOrderAttribute>()
+                .FirstOrDefault()?.Order ?? int.MaxValue;
+        }
+
+        private static string GetJsonPropertyName(PropertyInfo prop, JsonSerializerOptions options)
+        {
+            var jsonPropertyName = prop.GetCustomAttributes(typeof(JsonPropertyNameAttribute), inherit: false)
+                .FirstOrDefault() as JsonPropertyNameAttribute;
+            var propertyName = jsonPropertyName?.Name ?? prop.Name;
+
+            // Apply the naming policy from options if no explicit JsonPropertyName is specified
+            if (jsonPropertyName == null && options.PropertyNamingPolicy != null)
+            {
+                propertyName = options.PropertyNamingPolicy.ConvertName(propertyName);
+            }
+            return propertyName;
         }
 
         private static bool ShouldSerializeValue(object? value, Type propertyType)
