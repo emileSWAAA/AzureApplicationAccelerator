@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace AzureApplicationAccelerator.Elements.Converters
 {
@@ -8,6 +9,7 @@ namespace AzureApplicationAccelerator.Elements.Converters
     {
         public override UIElement? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            // Create a copy of the reader to peek at the type
             var readerCopy = reader;
             using var jsonDoc = JsonDocument.ParseValue(ref readerCopy);
             var jsonObject = jsonDoc.RootElement;
@@ -18,14 +20,26 @@ namespace AzureApplicationAccelerator.Elements.Converters
             }
 
             var typeDiscriminator = typeProperty.GetString();
+            if (string.IsNullOrWhiteSpace(typeDiscriminator))
+            {
+                throw new JsonException("Empty 'type' property on UIElement.");
+            }
 
-            if (string.IsNullOrWhiteSpace(typeDiscriminator) ||
-                !AzureResourceUIConstants.TypeMapping.TryGetValue(typeDiscriminator, out var targetType))
+            if (!AzureResourceUIConstants.TypeMapping.TryGetValue(typeDiscriminator, out var targetType))
             {
                 throw new JsonException($"Unknown UIElement type: '{typeDiscriminator}'.");
             }
 
-            return JsonSerializer.Deserialize(ref reader, targetType, options) as UIElement;
+            var newOptions = new JsonSerializerOptions(options);
+            foreach (var converter in options.Converters)
+            {
+                if (converter.GetType() != typeof(UIElementJsonConverter))
+                {
+                    newOptions.Converters.Add(converter);
+                }
+            }
+
+            return JsonSerializer.Deserialize(ref reader, targetType, newOptions) as UIElement;
         }
 
         public override void Write(Utf8JsonWriter writer, UIElement value, JsonSerializerOptions options)
@@ -53,6 +67,12 @@ namespace AzureApplicationAccelerator.Elements.Converters
                     var jsonPropertyName = prop.GetCustomAttributes(typeof(JsonPropertyNameAttribute), inherit: false)
                         .FirstOrDefault() as JsonPropertyNameAttribute;
                     var propertyName = jsonPropertyName?.Name ?? prop.Name;
+
+                    // Apply the naming policy from options if no explicit JsonPropertyName is specified
+                    if (jsonPropertyName == null && options.PropertyNamingPolicy != null)
+                    {
+                        propertyName = options.PropertyNamingPolicy.ConvertName(propertyName);
+                    }
 
                     writer.WritePropertyName(propertyName);
                     JsonSerializer.Serialize(writer, propValue, prop.PropertyType, options);
