@@ -46,13 +46,6 @@
         var group = args.FromListId.Substring(8);
         var toolbarItem = ToolbarProvider.Groups.FirstOrDefault(g => g.Name == group)?.Items[args.OldIndex];
 
-        // get the item at the old index in list 1
-        // var item = DefinitionService.Definition.Steps.First().Elements[args.OldIndex];
-
-        var clone = toolbarItem;
-
-        // add it to the new index in list 2
-
-        await DefinitionService.AddElementAsync(toolbarItem, args.NewIndex);
+        await DefinitionService.AddElementAsync(toolbarItem, args.NewIndex, args.ToListId);
     }
 }

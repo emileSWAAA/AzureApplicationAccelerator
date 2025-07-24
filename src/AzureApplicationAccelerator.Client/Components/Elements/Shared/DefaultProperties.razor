@@ -14,7 +14,7 @@
             </PropertyDescription>
         }
 
-        @if (!HasComplexToolTip)
+        @if (!HasComplexToolTip && !HasNoToolTip)
         {
             <FluentTextArea @bind-Value="Element.ToolTip" Label="ToolTip" Id="elementToolTip" Style="width: 100%;" Resize="TextAreaResize.Vertical" />
             <PropertyDescription>
@@ -41,4 +41,5 @@
     private bool HasComplexLabel => Element is IComplexLabel;
     private bool HasComplexToolTip => Element is IComplexToolTip;
     private bool HasNoLabel => Element is INoLabel;
+    private bool HasNoToolTip => Element is INoToolTip;
 }

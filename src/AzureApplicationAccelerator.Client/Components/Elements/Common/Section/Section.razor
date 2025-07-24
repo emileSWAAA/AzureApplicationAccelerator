@@ -1,6 +1,67 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentStack>
+    <div class="sortable-container">
+        @if (!Element?.Elements?.Any() ?? true)
+        {
+            <div class="section-dropzone">Drag elements here to get started!</div>
+        }
+        <FluentSortableList Id="@($"section-{Element.Name}")"
+                            Group="@($"section-{Element.Name}")"
+                            Items="@Element?.Elements"
+                            Clone="true"
+                            Handle="true"
+                            Class="canvas-container section-container">
+            <ItemTemplate>
+                <CanvasItem Element="@context" @key="@context.GetHashCode()" />
+            </ItemTemplate>
+        </FluentSortableList>
+    </div>
+</FluentStack>
+
+<style>
+    .sortable-container {
+        position: relative !important;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .section-dropzone {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #90caf9 !important; /* TODO: Use design  tokens */
+        font-size: 1.2rem;
+        pointer-events: none;
+        border: 2px dashed #b3d4fc !important; /* TODO: Use design  tokens */
+        border-radius: 4px !important;
+        background-color: #f9fbff !important; /* TODO: Use design  tokens */
+        padding: 20px !important;
+        text-align: center !important;
+        max-height: calc(100% - 40px);
+        box-sizing: border-box;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+    .section-container {
+        min-height: 10vh !important;
+        position: relative !important;
+        width: 100%;
+    }
+
+    .dropzone-hint {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #90caf9; /* TODO: Use design  tokens */
+        font-size: 1.2rem;
+        pointer-events: none;
+    }
+</style>
 
 @code {
     [Parameter] public SectionElement Element { get; set; } = default!;

@@ -1,4 +1,6 @@
 ﻿using AzureApplicationAccelerator.Elements;
+using AzureApplicationAccelerator.Elements.Entities.Common;
+using AzureApplicationAccelerator.Shared.Constants;
 using AzureApplicationAccelerator.Shared.Extensions;
 using AzureApplicationAccelerator.Shared.Models;
 using Microsoft.JSInterop;
@@ -189,7 +191,7 @@ namespace AzureApplicationAccelerator.Shared.Services
             NotifyChanged();
         }
 
-        public async Task AddElementAsync(ToolbarItem? toolbarItem, int? index = null)
+        public async Task AddElementAsync(ToolbarItem? toolbarItem, int? index = null, string target = ToolbarConstants.CanvasId)
         {
             if (toolbarItem is null)
             {
@@ -201,25 +203,7 @@ namespace AzureApplicationAccelerator.Shared.Services
                 throw new ArgumentException("Failed to map toolbar item to UI element.");
             }
 
-            if (index.HasValue)
-            {
-                var insertIndex = index.Value;
-                int count = ActiveStep.Elements.Count;
-
-                if (insertIndex < 0 || insertIndex > count)
-                {
-                    throw new ArgumentOutOfRangeException(
-                        nameof(index),
-                        $"Index must be between 0 and {count} (inclusive)."
-                    );
-                }
-
-                ActiveStep.Elements.Insert(insertIndex, element);
-            }
-            else
-            {
-                ActiveStep.Elements.Add(element);
-            }
+            InsertElementAt(element, index, target);
 
             await PersistAsync();
             NotifyChanged();
@@ -257,6 +241,67 @@ namespace AzureApplicationAccelerator.Shared.Services
                 await PersistAsync();
                 NotifyChanged();
             }
+        }
+
+        private void InsertElementAt(UIElement element, int? targetIndex, string targetContainer)
+        {
+            if (targetContainer.Equals(ToolbarConstants.CanvasId, StringComparison.OrdinalIgnoreCase))
+            {
+                InsertElementIntoCanvas(element, targetIndex);
+            }
+            else if (targetContainer.StartsWith(ToolbarConstants.SectionCanvasId, StringComparison.OrdinalIgnoreCase))
+            {
+                var sectionName = targetContainer.Substring(ToolbarConstants.SectionCanvasId.Length);
+                InsertElementIntoSection(element, targetIndex, sectionName);
+            }
+        }
+
+        private void InsertElementIntoCanvas(UIElement element, int? targetIndex)
+        {
+            if (targetIndex.HasValue)
+            {
+                ValidateAndInsert(ActiveStep.Elements, element, targetIndex.Value);
+            }
+            else
+            {
+                ActiveStep.Elements.Add(element);
+            }
+        }
+
+        private void InsertElementIntoSection(UIElement element, int? targetIndex, string sectionName)
+        {
+            var sectionElement = FindSectionElement(sectionName);
+            if (sectionElement != null)
+            {
+                if (targetIndex.HasValue)
+                {
+                    ValidateAndInsert(sectionElement.Elements, element, targetIndex.Value);
+                }
+                else
+                {
+                    sectionElement.Elements.Add(element);
+                }
+            }
+        }
+
+        private SectionElement? FindSectionElement(string sectionName)
+        {
+            return ActiveStep.Elements
+                .OfType<SectionElement>()
+                .FirstOrDefault(s => s.Name.Equals(sectionName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void ValidateAndInsert(IList<UIElement> elements, UIElement element, int insertIndex)
+        {
+            int count = elements.Count;
+            if (insertIndex < 0 || insertIndex > count)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(insertIndex),
+                    $"Index must be between 0 and {count} (inclusive)."
+                );
+            }
+            elements.Insert(insertIndex, element);
         }
     }
 }

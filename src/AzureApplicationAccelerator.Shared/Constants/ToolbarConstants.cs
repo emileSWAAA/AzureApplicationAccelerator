@@ -5,6 +5,9 @@ namespace AzureApplicationAccelerator.Shared.Constants
 {
     public static class ToolbarConstants
     {
+        public const string CanvasId = "canvas";
+        public const string SectionCanvasId = "section-";
+
         public static class Groups
         {
             public static class Common
