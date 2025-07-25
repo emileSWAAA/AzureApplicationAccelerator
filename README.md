@@ -44,7 +44,7 @@ This project provides a builder for `CreateUIDefinition.json` files leveraging A
 
 ## Implemented UI Elements
 
-| Element Name                                   | Implemented | Documentation                                                                                                                              |
+| Element Name                                   | Implemented [10/26] | Documentation                                                                                                                              |
 | ---------------------------------------------- | :---------: | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | Microsoft.Common.CheckBox                      |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-checkbox)                      |
 | Microsoft.Common.DropDown                      |      ✔️     | [Docs](https://learn.microsoft.com/en-us/azure/azure-resource-manager/managed-applications/microsoft-common-dropdown)                      |
