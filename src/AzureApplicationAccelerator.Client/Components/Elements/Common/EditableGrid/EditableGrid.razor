@@ -1,7 +1,133 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
 
-<div>Not yet Implemented</div>
+<FluentStack Orientation="Orientation.Vertical" VerticalGap="10">
+    @if (!string.IsNullOrEmpty(Element.Label))
+    {
+        <FluentLabel Weight="FontWeight.Bold">
+            @Element.Label
+            @if (Element.Constraints?.Rows?.Count?.Min > 0)
+            {
+                <span style="color: red;">*</span>
+            }
+        </FluentLabel>
+    }
+
+    @if (Element.Constraints?.Columns?.Any() == true)
+    {
+        <div style="@GetContainerStyle()" aria-label="@Element.AriaLabel">
+            <FluentDataGrid Items="@SampleRows.AsQueryable()" TGridItem="Dictionary<string, object>" Style="width: 100%;">
+                @foreach (var column in Element.Constraints.Columns)
+                {
+                    <TemplateColumn Title="@column.Header" Context="row" Style="@GetColumnStyle(column)">
+                        @{
+                            var columnElement = column.Element;
+                        }
+                        @if (columnElement is TextBoxElement textBox)
+                        {
+                            <TextBox Element="textBox" />
+                        }
+                        else if (columnElement is DropDownElement dropDown)
+                        {
+                            <DropDown Element="dropDown" />
+                        }
+                        else if (columnElement is OptionsGroupElement optionsGroup)
+                        {
+                            <OptionsGroup Element="optionsGroup" />
+                        }
+                    </TemplateColumn>
+                }
+                <TemplateColumn Title="" Context="row" Style="width: auto;">
+                    <FluentButton Icon="@(new Icons.Regular.Size16.Delete())" 
+                                Appearance="Appearance.Stealth" 
+                                Size="ButtonSize.Small"
+                                Title="Remove row" />
+                </TemplateColumn>
+            </FluentDataGrid>
+            
+            <FluentButton Appearance="Appearance.Accent" 
+                        Style="margin-top: 10px;"
+                        IconStart="@(new Icons.Regular.Size16.Add())">
+                Add Row
+            </FluentButton>
+        </div>
+    }
+    else
+    {
+        <FluentMessageBar>
+            Configure columns in the editor to display the editable grid.
+        </FluentMessageBar>
+    }
+</FluentStack>
 
 @code {
     [Parameter] public EditableGridElement Element { get; set; } = default!;
+
+    private List<Dictionary<string, object>> SampleRows = new();
+
+    protected override void OnInitialized()
+    {
+        GenerateSampleRows();
+    }
+
+    protected override void OnParametersSet()
+    {
+        GenerateSampleRows();
+    }
+
+    private void GenerateSampleRows()
+    {
+        SampleRows.Clear();
+        
+        if (Element.Constraints?.Columns?.Any() != true)
+            return;
+
+        var minRows = Element.Constraints.Rows?.Count?.Min ?? 1;
+        var sampleRowCount = Math.Max(minRows, 2); // Show at least 2 rows for better preview
+
+        for (int i = 0; i < sampleRowCount; i++)
+        {
+            var row = new Dictionary<string, object>();
+            foreach (var column in Element.Constraints.Columns)
+            {
+                row[column.Id] = GetSampleValue(column.Element, i);
+            }
+            SampleRows.Add(row);
+        }
+    }
+
+    private object GetSampleValue(UIElement element, int rowIndex)
+    {
+        return element switch
+        {
+            TextBoxElement textBox => textBox.Placeholder ?? $"Sample text {rowIndex + 1}",
+            DropDownElement dropDown => dropDown.Constraints?.AllowedValues?.FirstOrDefault()?.Value ?? "Option 1",
+            OptionsGroupElement optionsGroup => optionsGroup.Constraints?.AllowedValues?.FirstOrDefault()?.Value ?? "Option 1",
+            _ => $"Value {rowIndex + 1}"
+        };
+    }
+
+    private string GetContainerStyle()
+    {
+        var width = Element.Constraints?.Width?.ToLowerInvariant() switch
+        {
+            "small" => "max-width: 400px;",
+            "medium" => "max-width: 600px;",
+            "full" or _ => "width: 100%;"
+        };
+        
+        return $"{width} border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 16px;";
+    }
+
+    private string GetColumnStyle(EditableGridColumn column)
+    {
+        if (!string.IsNullOrEmpty(column.Width))
+        {
+            if (column.Width.EndsWith("fr"))
+            {
+                return $"flex: {column.Width.Replace("fr", "")};";
+            }
+            return $"width: {column.Width};";
+        }
+        return "flex: 1;";
+    }
 }

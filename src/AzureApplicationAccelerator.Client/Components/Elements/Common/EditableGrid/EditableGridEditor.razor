@@ -1,7 +1,268 @@
 @namespace AzureApplicationAccelerator.Client.Components.Elements
+@inject IJSRuntime JSRuntime
+@inject IMessageService MessageService
 
-<div>Not yet Implemented</div>
+<FluentAccordionItem Heading="Basic Settings">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Settings())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentTextField @bind-Value="Element.AriaLabel" 
+                     Label="Aria Label"
+                     Placeholder="Enter accessibility label for screen readers"
+                     Style="width: 100%; margin-bottom: 10px;" />
+    <PropertyDescription>
+        Provides an accessible label for the editable grid that screen readers can announce to users.
+    </PropertyDescription>
+
+    <FluentSelect TOption="string" @bind-Value="Element.Constraints.Width" 
+                  Label="Width"
+                  Style="width: 100%; margin-bottom: 10px;">
+        <FluentOption Value="">Default</FluentOption>
+        <FluentOption Value="Small">Small</FluentOption>
+        <FluentOption Value="Medium">Medium</FluentOption>
+        <FluentOption Value="Full">Full</FluentOption>
+    </FluentSelect>
+    <PropertyDescription>
+        Controls the width of the editable grid. Small and Medium provide fixed widths, Full uses the entire available width.
+    </PropertyDescription>
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Row Constraints">
+    <FluentIcon Value="@(new Icons.Regular.Size20.TableSimple())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentNumberField @bind-Value="Element.Constraints.Rows.Count.Min"
+                       Label="Minimum Rows"
+                       Min="0"
+                       Style="width: 100%; margin-bottom: 10px;" />
+    <PropertyDescription>
+        The minimum number of rows that must be present in the grid. Set to 0 for no minimum.
+    </PropertyDescription>
+
+    <FluentNumberField @bind-Value="Element.Constraints.Rows.Count.Max"
+                       Label="Maximum Rows"
+                       Min="1"
+                       Style="width: 100%; margin-bottom: 10px;" />
+    <PropertyDescription>
+        The maximum number of rows that can be added to the grid.
+    </PropertyDescription>
+</FluentAccordionItem>
+
+<FluentAccordionItem Heading="Columns">
+    <FluentIcon Value="@(new Icons.Regular.Size20.Table())" Slot="start" Color="@Color.Neutral" />
+
+    <FluentButton @onclick="AddColumn" 
+                  Appearance="Appearance.Accent" 
+                  Style="margin-bottom: 15px;" 
+                  IconStart="@(new Icons.Regular.Size20.Add())">
+        Add Column
+    </FluentButton>
+
+    @if (Element.Constraints.Columns?.Any() == true)
+    {
+        <FluentDataGrid Items="@Element.Constraints.Columns.AsQueryable()" 
+                        GridTemplateColumns="2fr 2fr 1fr 2fr auto" 
+                        TGridItem="EditableGridColumn" 
+                        Class="mb-3">
+            <TemplateColumn Title="Column ID" Context="column" Style="height: auto;">
+                <FluentTextField Value="@column.Id"
+                                 ValueChanged="@(value => column.Id = value)"
+                                 Id="@($"col-id-{column.GetHashCode()}")"
+                                 Placeholder="e.g., colName"
+                                 Required="true"
+                                 Style="width: 100%;" />
+                <FluentTooltip Anchor="@($"col-id-{column.GetHashCode()}")">
+                    Unique identifier for this column. Used in validation expressions and data binding.
+                </FluentTooltip>
+            </TemplateColumn>
+            
+            <TemplateColumn Title="Header" Context="column" Style="height: auto;">
+                <FluentTextField Value="@column.Header"
+                                 ValueChanged="@(value => column.Header = value)"
+                                 Id="@($"col-header-{column.GetHashCode()}")"
+                                 Placeholder="e.g., Name"
+                                 Required="true"
+                                 Style="width: 100%;" />
+                <FluentTooltip Anchor="@($"col-header-{column.GetHashCode()}")">
+                    The text displayed in the column header.
+                </FluentTooltip>
+            </TemplateColumn>
+            
+            <TemplateColumn Title="Width" Context="column" Style="height: auto;">
+                <FluentTextField Value="@column.Width"
+                                 ValueChanged="@(value => column.Width = value)"
+                                 Id="@($"col-width-{column.GetHashCode()}")"
+                                 Placeholder="e.g., 1fr"
+                                 Style="width: 100%;" />
+                <FluentTooltip Anchor="@($"col-width-{column.GetHashCode()}")">
+                    Column width using CSS units. Use fractional units (e.g., 1fr, 2fr) for flexible sizing.
+                </FluentTooltip>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Element Type" Context="column" Style="height: auto;">
+                <FluentSelect TOption="string" Value="@SelectedElementTypes[column]"
+                              ValueChanged="@(value => ChangeElementType(column, value))"
+                              Style="width: 100%;">
+                    <FluentOption Value="TextBox">TextBox</FluentOption>
+                    <FluentOption Value="DropDown">DropDown</FluentOption>
+                    <FluentOption Value="OptionsGroup">OptionsGroup</FluentOption>
+                </FluentSelect>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Actions" Context="column">
+                <FluentButton @onclick="() => ConfigureColumnElement(column)" 
+                              Appearance="Appearance.Stealth"
+                              Size="ButtonSize.Small"
+                              Title="Configure element">
+                    <FluentIcon Value="@(new Icons.Regular.Size16.Settings())" />
+                </FluentButton>
+                <FluentButton @onclick="() => RemoveColumn(column)" 
+                              Appearance="Appearance.Stealth"
+                              Size="ButtonSize.Small"
+                              Title="Remove column">
+                    <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" />
+                </FluentButton>
+            </TemplateColumn>
+        </FluentDataGrid>
+    }
+    else
+    {
+        <FluentMessageBar>
+            No columns defined. Add at least one column to create a functional editable grid.
+        </FluentMessageBar>
+    }
+</FluentAccordionItem>
+
+@if (SelectedColumn != null)
+{
+    <FluentAccordionItem Heading="@($"Configure Column: {SelectedColumn.Header}")" Expanded="true">
+        <FluentIcon Value="@(new Icons.Regular.Size20.Edit())" Slot="start" Color="@Color.Neutral" />
+        
+        <FluentButton @onclick="CloseColumnEditor" 
+                      Appearance="Appearance.Stealth" 
+                      Style="float: right; margin-bottom: 10px;">
+            <FluentIcon Value="@(new Icons.Regular.Size16.Dismiss())" />
+        </FluentButton>
+
+        @if (SelectedColumn.Element is TextBoxElement textBoxElement)
+        {
+            <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
+                <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">TextBox Configuration</FluentLabel>
+                <TextBoxEditor Element="textBoxElement" />
+            </div>
+        }
+        else if (SelectedColumn.Element is DropDownElement dropDownElement)
+        {
+            <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
+                <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">DropDown Configuration</FluentLabel>
+                <DropDownEditor Element="dropDownElement" />
+            </div>
+        }
+        else if (SelectedColumn.Element is OptionsGroupElement optionsGroupElement)
+        {
+            <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
+                <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">OptionsGroup Configuration</FluentLabel>
+                <OptionsGroupEditor Element="optionsGroupElement" />
+            </div>
+        }
+    </FluentAccordionItem>
+}
 
 @code {
     [Parameter] public EditableGridElement Element { get; set; } = default!;
+
+    private EditableGridColumn? SelectedColumn { get; set; }
+    private Dictionary<EditableGridColumn, string> SelectedElementTypes { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        InitializeConstraints();
+        InitializeElementTypes();
+    }
+
+    protected override void OnParametersSet()
+    {
+        InitializeConstraints();
+        InitializeElementTypes();
+    }
+
+    private void InitializeConstraints()
+    {
+        Element.Constraints ??= new EditableGridConstraints();
+        Element.Constraints.Rows ??= new EditableGridRowConstraints();
+        Element.Constraints.Rows.Count ??= new EditableGridCountConstraints();
+        Element.Constraints.Columns ??= new List<EditableGridColumn>();
+    }
+
+    private void InitializeElementTypes()
+    {
+        SelectedElementTypes.Clear();
+        if (Element.Constraints.Columns != null)
+        {
+            foreach (var column in Element.Constraints.Columns)
+            {
+                var elementType = column.Element switch
+                {
+                    TextBoxElement => "TextBox",
+                    DropDownElement => "DropDown",
+                    OptionsGroupElement => "OptionsGroup",
+                    _ => "TextBox"
+                };
+                SelectedElementTypes[column] = elementType;
+            }
+        }
+    }
+
+    private void AddColumn()
+    {
+        var newColumn = new EditableGridColumn
+        {
+            Id = $"col{Element.Constraints.Columns.Count + 1}",
+            Header = $"Column {Element.Constraints.Columns.Count + 1}",
+            Width = "1fr",
+            Element = new TextBoxElement 
+            { 
+                Name = $"col{Element.Constraints.Columns.Count + 1}_textbox", 
+                Type = "Microsoft.Common.TextBox" 
+            }
+        };
+
+        Element.Constraints.Columns.Add(newColumn);
+        SelectedElementTypes[newColumn] = "TextBox";
+    }
+
+    private void RemoveColumn(EditableGridColumn column)
+    {
+        Element.Constraints.Columns.Remove(column);
+        SelectedElementTypes.Remove(column);
+        
+        if (SelectedColumn == column)
+        {
+            SelectedColumn = null;
+        }
+    }
+
+    private void ConfigureColumnElement(EditableGridColumn column)
+    {
+        SelectedColumn = column;
+    }
+
+    private void CloseColumnEditor()
+    {
+        SelectedColumn = null;
+    }
+
+    private void ChangeElementType(EditableGridColumn column, string? elementType)
+    {
+        if (string.IsNullOrEmpty(elementType)) return;
+
+        UIElement newElement = elementType switch
+        {
+            "TextBox" => new TextBoxElement { Name = $"{column.Id}_textbox", Type = "Microsoft.Common.TextBox" },
+            "DropDown" => new DropDownElement { Name = $"{column.Id}_dropdown", Type = "Microsoft.Common.DropDown" },
+            "OptionsGroup" => new OptionsGroupElement { Name = $"{column.Id}_optionsgroup", Type = "Microsoft.Common.OptionsGroup" },
+            _ => new TextBoxElement { Name = $"{column.Id}_textbox", Type = "Microsoft.Common.TextBox" }
+        };
+
+        column.Element = newElement;
+        SelectedElementTypes[column] = elementType;
+    }
 }
