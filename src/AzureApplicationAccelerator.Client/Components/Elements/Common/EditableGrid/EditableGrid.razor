@@ -24,38 +24,15 @@
                         }
                         @if (columnElement is TextBoxElement textBox)
                         {
-                            <FluentTextField Name="@($"{Element.Name}_{column.Id}")"
-                                           Placeholder="@textBox.Placeholder"
-                                           Style="width: 100%;"
-                                           ReadOnly="true" />
+                            <TextBox Element="textBox" />
                         }
                         else if (columnElement is DropDownElement dropDown)
                         {
-                            <FluentSelect TOption="string" Name="@($"{Element.Name}_{column.Id}")" 
-                                        Style="width: 100%;"
-                                        Disabled="true">
-                                @if (dropDown.Constraints?.AllowedValues?.Any() == true)
-                                {
-                                    @foreach (var option in dropDown.Constraints.AllowedValues)
-                                    {
-                                        <FluentOption Value="@option.Value">@option.Label</FluentOption>
-                                    }
-                                }
-                            </FluentSelect>
+                            <DropDown Element="dropDown" />
                         }
                         else if (columnElement is OptionsGroupElement optionsGroup)
                         {
-                            <FluentSelect TOption="string" Name="@($"{Element.Name}_{column.Id}")" 
-                                        Style="width: 100%;"
-                                        Disabled="true">
-                                @if (optionsGroup.Constraints?.AllowedValues?.Any() == true)
-                                {
-                                    @foreach (var option in optionsGroup.Constraints.AllowedValues)
-                                    {
-                                        <FluentOption Value="@option.Value">@option.Label</FluentOption>
-                                    }
-                                }
-                            </FluentSelect>
+                            <OptionsGroup Element="optionsGroup" />
                         }
                     </TemplateColumn>
                 }

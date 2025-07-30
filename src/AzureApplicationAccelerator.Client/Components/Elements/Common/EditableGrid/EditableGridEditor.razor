@@ -143,114 +143,21 @@
         {
             <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
                 <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">TextBox Configuration</FluentLabel>
-                
-                <FluentTextField @bind-Value="textBoxElement.Placeholder"
-                                 Label="Placeholder"
-                                 Placeholder="Enter placeholder text"
-                                 Style="width: 100%; margin-bottom: 10px;" />
-                
-                <FluentTextField @bind-Value="textBoxElement.DefaultValue"
-                                 Label="Default Value"
-                                 Placeholder="Enter default value"
-                                 Style="width: 100%; margin-bottom: 10px;" />
-                
-                <FluentCheckbox @bind-CheckState="textBoxElement.MultiLine"
-                                Label="Multi-line"
-                                Style="margin-bottom: 10px;" />
-
-                <RequiredConstraint @bind-Required="textBoxElement.Constraints.Required" />
+                <TextBoxEditor Element="textBoxElement" />
             </div>
         }
         else if (SelectedColumn.Element is DropDownElement dropDownElement)
         {
             <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
                 <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">DropDown Configuration</FluentLabel>
-                
-                <FluentTextField @bind-Value="dropDownElement.Placeholder"
-                                 Label="Placeholder"
-                                 Placeholder="Select an option..."
-                                 Style="width: 100%; margin-bottom: 10px;" />
-
-                <FluentCheckbox @bind-CheckState="dropDownElement.Multiselect"
-                                Label="Allow Multiple Selection"
-                                Style="margin-bottom: 10px;" />
-
-                <RequiredConstraint @bind-Required="dropDownElement.Constraints.Required" />
-
-                <FluentLabel Weight="FontWeight.Bold" Style="margin: 15px 0 10px 0;">Options</FluentLabel>
-                <FluentButton @onclick="() => AddDropDownOption(dropDownElement)" 
-                              Appearance="Appearance.Accent" 
-                              Size="ButtonSize.Small"
-                              Style="margin-bottom: 10px;"
-                              IconStart="@(new Icons.Regular.Size16.Add())">
-                    Add Option
-                </FluentButton>
-
-                @if (dropDownElement.Constraints.AllowedValues?.Any() == true)
-                {
-                    @foreach (var option in dropDownElement.Constraints.AllowedValues)
-                    {
-                        <FluentCard Style="margin-bottom: 8px; padding: 10px;">
-                            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
-                                <FluentTextField @bind-Value="option.Label" 
-                                               Placeholder="Display text" 
-                                               Style="flex: 1; margin-right: 10px;" />
-                                <FluentTextField @bind-Value="option.Value" 
-                                               Placeholder="Value" 
-                                               Style="flex: 1; margin-right: 10px;" />
-                                <FluentButton @onclick="() => RemoveDropDownOption(dropDownElement, option)" 
-                                            Appearance="Appearance.Stealth" 
-                                            Size="ButtonSize.Small">
-                                    <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" />
-                                </FluentButton>
-                            </FluentStack>
-                        </FluentCard>
-                    }
-                }
+                <DropDownEditor Element="dropDownElement" />
             </div>
         }
         else if (SelectedColumn.Element is OptionsGroupElement optionsGroupElement)
         {
             <div style="border: 1px solid var(--neutral-stroke-divider); border-radius: 4px; padding: 15px; margin-top: 10px;">
                 <FluentLabel Weight="FontWeight.Bold" Style="margin-bottom: 10px;">OptionsGroup Configuration</FluentLabel>
-                
-                <FluentTextField @bind-Value="optionsGroupElement.DefaultValue"
-                                 Label="Default Value"
-                                 Placeholder="Enter default selection"
-                                 Style="width: 100%; margin-bottom: 10px;" />
-
-                <RequiredConstraint @bind-Required="optionsGroupElement.Constraints.Required" />
-
-                <FluentLabel Weight="FontWeight.Bold" Style="margin: 15px 0 10px 0;">Options</FluentLabel>
-                <FluentButton @onclick="() => AddOptionsGroupOption(optionsGroupElement)" 
-                              Appearance="Appearance.Accent" 
-                              Size="ButtonSize.Small"
-                              Style="margin-bottom: 10px;"
-                              IconStart="@(new Icons.Regular.Size16.Add())">
-                    Add Option
-                </FluentButton>
-
-                @if (optionsGroupElement.Constraints.AllowedValues?.Any() == true)
-                {
-                    @foreach (var option in optionsGroupElement.Constraints.AllowedValues)
-                    {
-                        <FluentCard Style="margin-bottom: 8px; padding: 10px;">
-                            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
-                                <FluentTextField @bind-Value="option.Label" 
-                                               Placeholder="Display text" 
-                                               Style="flex: 1; margin-right: 10px;" />
-                                <FluentTextField @bind-Value="option.Value" 
-                                               Placeholder="Value" 
-                                               Style="flex: 1; margin-right: 10px;" />
-                                <FluentButton @onclick="() => RemoveOptionsGroupOption(optionsGroupElement, option)" 
-                                            Appearance="Appearance.Stealth" 
-                                            Size="ButtonSize.Small">
-                                    <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" />
-                                </FluentButton>
-                            </FluentStack>
-                        </FluentCard>
-                    }
-                }
+                <OptionsGroupEditor Element="optionsGroupElement" />
             </div>
         }
     </FluentAccordionItem>
@@ -354,35 +261,5 @@
 
         column.Element = newElement;
         SelectedElementTypes[column] = elementType;
-    }
-
-    private void AddDropDownOption(DropDownElement dropDown)
-    {
-        dropDown.Constraints.AllowedValues ??= new List<AllowedValue>();
-        dropDown.Constraints.AllowedValues.Add(new AllowedValue 
-        { 
-            Label = "New Option", 
-            Value = $"option{dropDown.Constraints.AllowedValues.Count + 1}" 
-        });
-    }
-
-    private void RemoveDropDownOption(DropDownElement dropDown, AllowedValue option)
-    {
-        dropDown.Constraints.AllowedValues?.Remove(option);
-    }
-
-    private void AddOptionsGroupOption(OptionsGroupElement optionsGroup)
-    {
-        optionsGroup.Constraints.AllowedValues ??= new List<OptionItem>();
-        optionsGroup.Constraints.AllowedValues.Add(new OptionItem 
-        { 
-            Label = "New Option", 
-            Value = $"option{optionsGroup.Constraints.AllowedValues.Count + 1}" 
-        });
-    }
-
-    private void RemoveOptionsGroupOption(OptionsGroupElement optionsGroup, OptionItem option)
-    {
-        optionsGroup.Constraints.AllowedValues?.Remove(option);
     }
 }
