@@ -63,7 +63,8 @@
                         TGridItem="EditableGridColumn" 
                         Class="mb-3">
             <TemplateColumn Title="Column ID" Context="column" Style="height: auto;">
-                <FluentTextField @bind-Value="column.Id"
+                <FluentTextField Value="@column.Id"
+                                 ValueChanged="@(value => column.Id = value)"
                                  Id="@($"col-id-{column.GetHashCode()}")"
                                  Placeholder="e.g., colName"
                                  Required="true"
@@ -74,7 +75,8 @@
             </TemplateColumn>
             
             <TemplateColumn Title="Header" Context="column" Style="height: auto;">
-                <FluentTextField @bind-Value="column.Header"
+                <FluentTextField Value="@column.Header"
+                                 ValueChanged="@(value => column.Header = value)"
                                  Id="@($"col-header-{column.GetHashCode()}")"
                                  Placeholder="e.g., Name"
                                  Required="true"
@@ -85,7 +87,8 @@
             </TemplateColumn>
             
             <TemplateColumn Title="Width" Context="column" Style="height: auto;">
-                <FluentTextField @bind-Value="column.Width"
+                <FluentTextField Value="@column.Width"
+                                 ValueChanged="@(value => column.Width = value)"
                                  Id="@($"col-width-{column.GetHashCode()}")"
                                  Placeholder="e.g., 1fr"
                                  Style="width: 100%;" />
@@ -95,8 +98,8 @@
             </TemplateColumn>
 
             <TemplateColumn Title="Element Type" Context="column" Style="height: auto;">
-                <FluentSelect TOption="string" @bind-Value="SelectedElementTypes[column]"
-                              @onchange="@((args) => ChangeElementType(column, args.Value?.ToString()))"
+                <FluentSelect TOption="string" Value="@SelectedElementTypes[column]"
+                              ValueChanged="@(value => ChangeElementType(column, value))"
                               Style="width: 100%;">
                     <FluentOption Value="TextBox">TextBox</FluentOption>
                     <FluentOption Value="DropDown">DropDown</FluentOption>
